@@ -1,20 +1,26 @@
 package edu.byu.cs.tweeter.server.service;
 
+import java.util.List;
 import java.util.Random;
 
+import edu.byu.cs.tweeter.model.domain.User;
 import edu.byu.cs.tweeter.model.net.request.FollowRequest;
+import edu.byu.cs.tweeter.model.net.request.FollowersRequest;
 import edu.byu.cs.tweeter.model.net.request.FollowingRequest;
 import edu.byu.cs.tweeter.model.net.request.GetFollowersCountRequest;
 import edu.byu.cs.tweeter.model.net.request.GetFollowingCountRequest;
 import edu.byu.cs.tweeter.model.net.request.IsFollowerRequest;
 import edu.byu.cs.tweeter.model.net.request.UnfollowRequest;
 import edu.byu.cs.tweeter.model.net.response.FollowResponse;
+import edu.byu.cs.tweeter.model.net.response.FollowersResponse;
 import edu.byu.cs.tweeter.model.net.response.FollowingResponse;
 import edu.byu.cs.tweeter.model.net.response.GetFollowersCountResponse;
 import edu.byu.cs.tweeter.model.net.response.GetFollowingCountResponse;
 import edu.byu.cs.tweeter.model.net.response.IsFollowerResponse;
 import edu.byu.cs.tweeter.model.net.response.UnfollowResponse;
 import edu.byu.cs.tweeter.server.dao.FollowDAO;
+import edu.byu.cs.tweeter.util.FakeData;
+import edu.byu.cs.tweeter.util.Pair;
 
 /**
  * Contains the business logic for getting the users a user is following.
@@ -38,6 +44,25 @@ public class FollowService {
         }
 
         return getFollowingDAO().getFollowees(request);
+    }
+
+    public FollowersResponse getFollowers(FollowersRequest request) {
+        if (request.getFollowerAlias() == null) {
+            throw new RuntimeException("[Bad Request] Request needs to have a follower alias");
+        } else if (request.getLimit() <= 0) {
+            throw new RuntimeException("[Bad Request] Request needs to have a positive limit");
+        } else if(request.getAuthtoken() == null) {
+            throw new RuntimeException("[Bad Request] Request needs to have an auth token");
+        } else if (request.getLastFollowerAlias() == null) {
+            throw new RuntimeException("[Bad Request] Request needs to have a last follower alias");
+        }
+
+        User lastUser = getFakeData().findUserByAlias(request.getLastFollowerAlias());
+        User targetUser = getFakeData().findUserByAlias(request.getFollowerAlias());
+
+        Pair<List<User>, Boolean> data = getFakeData().getPageOfUsers(lastUser, request.getLimit(), targetUser);
+
+        return new FollowersResponse(data.getFirst(), data.getSecond());
     }
 
     public UnfollowResponse unfollow(UnfollowRequest request) {
@@ -101,5 +126,15 @@ public class FollowService {
      */
     FollowDAO getFollowingDAO() {
         return new FollowDAO();
+    }
+
+    /**
+     * Returns the {@link FakeData} object used to generate dummy users and auth tokens.
+     * This is written as a separate method to allow mocking of the {@link FakeData}.
+     *
+     * @return a {@link FakeData} instance.
+     */
+    FakeData getFakeData() {
+        return FakeData.getInstance();
     }
 }

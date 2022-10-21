@@ -10,6 +10,7 @@ import org.mockito.stubbing.Answer;
 import java.util.Arrays;
 import java.util.List;
 
+import edu.byu.cs.tweeter.client.model.service.FollowService;
 import edu.byu.cs.tweeter.model.domain.AuthToken;
 import edu.byu.cs.tweeter.model.domain.User;
 
@@ -28,7 +29,8 @@ public class FollowingPresenterTest {
     private AuthToken fakeAuthToken;
     private FollowService followingServiceMock;
     private FollowingPresenter followingPresenterSpy;
-    private FollowingPresenter.View followingViewMock;
+    private PagedPresenter.PagedView<User> followingViewMock;
+    //private FollowingPresenter.View followingViewMock;
 
     /**
      * Setup mocks and spies needed to let test cases control what users are returned
@@ -42,14 +44,18 @@ public class FollowingPresenterTest {
         fakeAuthToken = new AuthToken("abc-123-xyz-789", "August 12, 2021 3:01 PM");
 
         // followingViewMock is used to verify that FollowingPresenter correctly calls view methods.
-        followingViewMock = Mockito.mock(FollowingPresenter.View.class);
+        //followingViewMock = Mockito.mock(FollowingPresenter.View.class);
+        followingViewMock = Mockito.mock(PagedPresenter.PagedView.class);
 
         // Create the mocks and spies needed to let test cases control what users are returned
         // FollowService.
-        FollowingPresenter followingPresenter = new FollowingPresenter(followingViewMock, fakeUser, fakeAuthToken);
+        //FollowingPresenter followingPresenter = new FollowingPresenter(followingViewMock, fakeUser, fakeAuthToken);
+        FollowingPresenter followingPresenter = new FollowingPresenter(followingViewMock);
+
         followingPresenterSpy = Mockito.spy(followingPresenter);
 
         followingServiceMock = Mockito.mock(FollowService.class);
+
         Mockito.doReturn(followingServiceMock).when(followingPresenterSpy).getFollowingService();
     }
 

@@ -1,11 +1,16 @@
 package edu.byu.cs.tweeter.client.backgroundTask;
 
 import android.os.Handler;
+import android.util.Log;
 
+import java.io.IOException;
 import java.util.List;
 
 import edu.byu.cs.tweeter.model.domain.AuthToken;
 import edu.byu.cs.tweeter.model.domain.User;
+import edu.byu.cs.tweeter.model.net.TweeterRemoteException;
+import edu.byu.cs.tweeter.model.net.request.FollowersRequest;
+import edu.byu.cs.tweeter.model.net.response.FollowersResponse;
 import edu.byu.cs.tweeter.util.Pair;
 
 /**
@@ -22,7 +27,26 @@ public class GetFollowersTask extends PagedTask<User> {
 
     @Override
     protected Pair<List<User>, Boolean> getItems() {
-        return getFakeData().getPageOfUsers(getLastItem(), getLimit(), getTargetUser());
+        //return getFakeData().getPageOfUsers(getLastItem(), getLimit(), getTargetUser());
+
+        if (getLastItem() == null) {
+            lastItem = getFakeData().getFirstUser();
+        }
+
+        try {
+            FollowersRequest request = new FollowersRequest(authToken, getTargetUser().getAlias(), getLimit(), getLastItem().getAlias());
+            FollowersResponse response = getServerFacade().getFollowers(request, "/getfollowers");
+
+            if (response.isSuccess()) {
+                return new Pair<>(response.getFollowers(), response.getHasMorePages());
+            } else {
+                throw new RuntimeException("[Bad Request] Unable to retrieve followers");
+            }
+        } catch (IOException | TweeterRemoteException ex) {
+            ex.printStackTrace();
+            Log.e(BackgroundTask.EXCEPTION_KEY, ex.getMessage(), ex);
+            throw new RuntimeException("[Server Error] Unable to retrieve followers");
+        }
     }
 
 }

@@ -8,7 +8,7 @@ import edu.byu.cs.tweeter.model.domain.AuthToken;
  */
 public class FollowingRequest {
 
-    private AuthToken authToken;
+    private AuthToken authtoken;
     private String followerAlias;
     private int limit;
     private String lastFolloweeAlias;
@@ -27,8 +27,8 @@ public class FollowingRequest {
      *                     there was no previous request or if no followees were returned in the
      *                     previous request).
      */
-    public FollowingRequest(AuthToken authToken, String followerAlias, int limit, String lastFolloweeAlias) {
-        this.authToken = authToken;
+    public FollowingRequest(AuthToken authtoken, String followerAlias, int limit, String lastFolloweeAlias) {
+        this.authtoken = authtoken;
         this.followerAlias = followerAlias;
         this.limit = limit;
         this.lastFolloweeAlias = lastFolloweeAlias;
@@ -39,17 +39,17 @@ public class FollowingRequest {
      *
      * @return the auth token.
      */
-    public AuthToken getAuthToken() {
-        return authToken;
+    public AuthToken getAuthtoken() {
+        return authtoken;
     }
 
     /**
      * Sets the auth token.
      *
-     * @param authToken the auth token.
+     * @param authtoken the auth token.
      */
-    public void setAuthToken(AuthToken authToken) {
-        this.authToken = authToken;
+    public void setAuthtoken(AuthToken authtoken) {
+        this.authtoken = authtoken;
     }
 
     /**

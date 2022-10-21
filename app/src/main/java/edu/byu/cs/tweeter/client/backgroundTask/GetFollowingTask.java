@@ -39,12 +39,12 @@ public class GetFollowingTask extends PagedTask<User> {
             if (response.isSuccess()) {
                 return new Pair<>(response.getFollowees(), response.getHasMorePages());
             } else {
-                throw new RuntimeException("[BadRequest400Exception] Unable to retrieve followees");
+                throw new RuntimeException("[Bad Request] Unable to retrieve followees");
             }
         } catch (IOException | TweeterRemoteException ex) {
             ex.printStackTrace();
             Log.e(BackgroundTask.EXCEPTION_KEY, ex.getMessage(), ex);
-            throw new RuntimeException("[ServerError500Exception] Unable to retrieve followees");
+            throw new RuntimeException("[Server Error] Unable to retrieve followees");
         }
     }
 }
