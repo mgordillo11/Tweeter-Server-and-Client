@@ -3,7 +3,7 @@ package edu.byu.cs.tweeter.model.net.request;
 import edu.byu.cs.tweeter.model.domain.AuthToken;
 import edu.byu.cs.tweeter.model.domain.Status;
 
-public class StoryRequest {
+public class FeedRequest {
     private AuthToken authtoken;
     private Status lastStatus;
     private String alias;
@@ -12,11 +12,10 @@ public class StoryRequest {
     /**
      * Allows construction of the object from Json. Private so it won't be called in normal code.
      */
-    private StoryRequest() {
-    }
+    private FeedRequest() {}
 
-    public StoryRequest(AuthToken authToken, String alias, int limit, Status lastStatus) {
-        this.authtoken = authToken;
+    public FeedRequest(AuthToken authtoken, Status lastStatus, String alias, int limit) {
+        this.authtoken = authtoken;
         this.lastStatus = lastStatus;
         this.alias = alias;
         this.limit = limit;
@@ -28,6 +27,14 @@ public class StoryRequest {
 
     public void setAuthtoken(AuthToken authtoken) {
         this.authtoken = authtoken;
+    }
+
+    public Status getLastStatus() {
+        return lastStatus;
+    }
+
+    public void setLastStatus(Status lastStatus) {
+        this.lastStatus = lastStatus;
     }
 
     public String getAlias() {
@@ -44,13 +51,5 @@ public class StoryRequest {
 
     public void setLimit(int limit) {
         this.limit = limit;
-    }
-
-    public Status getLastStatus() {
-        return lastStatus;
-    }
-
-    public void setLastStatus(Status lastStatus) {
-        this.lastStatus = lastStatus;
     }
 }

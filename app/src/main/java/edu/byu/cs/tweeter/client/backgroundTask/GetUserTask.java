@@ -5,17 +5,12 @@ import android.os.Handler;
 import android.util.Log;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 
 import edu.byu.cs.tweeter.model.domain.AuthToken;
 import edu.byu.cs.tweeter.model.domain.User;
 import edu.byu.cs.tweeter.model.net.TweeterRemoteException;
 import edu.byu.cs.tweeter.model.net.request.GetUserRequest;
-import edu.byu.cs.tweeter.model.net.request.LoginRequest;
 import edu.byu.cs.tweeter.model.net.response.GetUserResponse;
-import edu.byu.cs.tweeter.model.net.response.LoginResponse;
-import edu.byu.cs.tweeter.util.Pair;
 
 /**
  * Background task that returns the profile for a specified user.
@@ -38,14 +33,10 @@ public class GetUserTask extends AuthenticatedTask {
 
     private User getUser() {
         //return getFakeData().findUserByAlias(alias);
-
-        Map<String, String> headers = new HashMap<>();
-        headers.put("Authorization", authToken.getToken());
-        headers.put("Alias", alias);
-
+        
         try {
             GetUserRequest request = new GetUserRequest(authToken, alias);
-            GetUserResponse response = getServerFacade().getUser(headers, "/getuser");
+            GetUserResponse response = getServerFacade().getUser(request, "/getuser");
 
             if(response.isSuccess()) {
                 return response.getUser();

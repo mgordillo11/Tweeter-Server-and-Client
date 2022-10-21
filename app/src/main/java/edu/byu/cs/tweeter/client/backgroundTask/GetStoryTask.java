@@ -27,25 +27,25 @@ public class GetStoryTask extends PagedTask<Status> {
 
     @Override
     protected Pair<List<Status>, Boolean> getItems() {
-        return getFakeData().getPageOfStatus(getLastItem(), getLimit());
+        //return getFakeData().getPageOfStatus(getLastItem(), getLimit());
 
-//        if (getLastItem() == null) {
-//            lastItem = getFakeData().getFakeStatuses().get(0);
-//        }
-//
-//        try {
-//            StoryRequest request = new StoryRequest(authToken, getTargetUser().getAlias(), getLimit(), getLastItem());
-//            StoryResponse response = getServerFacade().getStory(request, "/getstory");
-//
-//            if (response.isSuccess()) {
-//                return new Pair<>(response.getStatuses(), response.getHasMorePages());
-//            } else {
-//                throw new RuntimeException("[BadRequest400Exception] Unable to retrieve statuses");
-//            }
-//        } catch (IOException | TweeterRemoteException ex) {
-//            ex.printStackTrace();
-//            Log.e(BackgroundTask.EXCEPTION_KEY, ex.getMessage(), ex);
-//            throw new RuntimeException("[ServerError500Exception] Unable to retrieve statuses");
-//        }
+        if (getLastItem() == null) {
+            lastItem = getFakeData().getFakeStatuses().get(0);
+        }
+
+        try {
+            StoryRequest request = new StoryRequest(authToken, getTargetUser().getAlias(), getLimit(), getLastItem());
+            StoryResponse response = getServerFacade().getStory(request, "/getstory");
+
+            if (response.isSuccess()) {
+                return new Pair<>(response.getStatuses(), response.getHasMorePages());
+            } else {
+                throw new RuntimeException("[Bad Request] Unable to retrieve statuses");
+            }
+        } catch (IOException | TweeterRemoteException ex) {
+            ex.printStackTrace();
+            Log.e(BackgroundTask.EXCEPTION_KEY, ex.getMessage(), ex);
+            throw new RuntimeException("[Server Error] Unable to retrieve statuses");
+        }
     }
 }

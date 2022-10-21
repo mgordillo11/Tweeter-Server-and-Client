@@ -2,6 +2,7 @@ package edu.byu.cs.tweeter.server.service;
 
 import edu.byu.cs.tweeter.model.domain.AuthToken;
 import edu.byu.cs.tweeter.model.domain.User;
+import edu.byu.cs.tweeter.model.net.request.GetUserRequest;
 import edu.byu.cs.tweeter.model.net.request.LoginRequest;
 import edu.byu.cs.tweeter.model.net.request.LogoutRequest;
 import edu.byu.cs.tweeter.model.net.request.RegisterRequest;
@@ -45,16 +46,16 @@ public class UserService {
         return new RegisterResponse(user, authToken);
     }
 
-    public GetUserResponse getUser(String alias, String authToken) {
-        if (alias == null) {
+    public GetUserResponse getUser(GetUserRequest request) {
+        if (request.getAlias() == null) {
             throw new RuntimeException("[Bad Request] Missing a username");
-        } else if (authToken == null) {
+        } else if (request.getAuthToken() == null) {
             throw new RuntimeException("[Bad Request] Missing an auth token");
         }
 
         // TODO: Get the user from the database. Replace with a real implementation.
 
-        return new GetUserResponse(getFakeData().findUserByAlias(alias));
+        return new GetUserResponse(getFakeData().findUserByAlias(request.getAlias()));
     }
 
     public LogoutResponse logout(LogoutRequest request) {

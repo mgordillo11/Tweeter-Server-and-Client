@@ -1,8 +1,18 @@
 package edu.byu.cs.tweeter.server.service;
 
+import java.util.Random;
+
+import edu.byu.cs.tweeter.model.net.request.FollowRequest;
 import edu.byu.cs.tweeter.model.net.request.FollowingRequest;
+import edu.byu.cs.tweeter.model.net.request.GetFollowersCountRequest;
+import edu.byu.cs.tweeter.model.net.request.GetFollowingCountRequest;
+import edu.byu.cs.tweeter.model.net.request.IsFollowerRequest;
 import edu.byu.cs.tweeter.model.net.request.UnfollowRequest;
+import edu.byu.cs.tweeter.model.net.response.FollowResponse;
 import edu.byu.cs.tweeter.model.net.response.FollowingResponse;
+import edu.byu.cs.tweeter.model.net.response.GetFollowersCountResponse;
+import edu.byu.cs.tweeter.model.net.response.GetFollowingCountResponse;
+import edu.byu.cs.tweeter.model.net.response.IsFollowerResponse;
 import edu.byu.cs.tweeter.model.net.response.UnfollowResponse;
 import edu.byu.cs.tweeter.server.dao.FollowDAO;
 
@@ -38,6 +48,48 @@ public class FollowService {
         }
 
         return new UnfollowResponse();
+    }
+
+    public FollowResponse follow(FollowRequest request) {
+        if (request.getUser() == null) {
+            throw new RuntimeException("[Bad Request] Request needs to have a user to follow");
+        } else if (request.getAuthtoken() == null) {
+            throw new RuntimeException("[Bad Request] Request needs to have an auth token");
+        }
+
+        return new FollowResponse();
+    }
+
+    public IsFollowerResponse isFollower(IsFollowerRequest request) {
+        if (request.getAuthtoken() == null) {
+            throw new RuntimeException("[Bad Request] Request needs to have an auth token");
+        } else if (request.getFollower() == null) {
+            throw new RuntimeException("[Bad Request] Request needs to have a follower");
+        } else if (request.getFollowee() == null) {
+            throw new RuntimeException("[Bad Request] Request needs to have a followee");
+        }
+
+        return new IsFollowerResponse(new Random().nextInt() > 0);
+    }
+
+    public GetFollowingCountResponse getFollowingCount(GetFollowingCountRequest request) {
+        if (request.getAuthtoken() == null) {
+            throw new RuntimeException("[Bad Request] Request needs to have an auth token");
+        } else if (request.getUser() == null) {
+            throw new RuntimeException("[Bad Request] Request needs to have a user");
+        }
+
+        return new GetFollowingCountResponse(20);
+    }
+
+    public GetFollowersCountResponse getFollowersCount(GetFollowersCountRequest request) {
+        if (request.getAuthtoken() == null) {
+            throw new RuntimeException("[Bad Request] Request needs to have an auth token");
+        } else if (request.getUser() == null) {
+            throw new RuntimeException("[Bad Request] Request needs to have a user");
+        }
+
+        return new GetFollowersCountResponse(20);
     }
 
     /**
