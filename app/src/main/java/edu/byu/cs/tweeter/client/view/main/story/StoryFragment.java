@@ -85,6 +85,7 @@ public class StoryFragment extends Fragment implements PagedPresenter.PagedView<
         storyRecyclerView.setAdapter(storyRecyclerViewAdapter);
 
         storyRecyclerView.addOnScrollListener(new StoryRecyclerViewPaginationScrollListener(layoutManager));
+
         storyPresenter = new StoryPresenter(this);
         storyRecyclerViewAdapter.loadMoreItems();
 

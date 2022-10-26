@@ -31,6 +31,7 @@ public class StatusService {
 
     public void postStatus(AuthToken currUserAuthToken, User currUser, String post, String formattedDateTime, List<String> parseURLs, List<String> parseMentions, SimpleNotificationObserver postStatusObserver) {
         Status newStatus = new Status(post, currUser, formattedDateTime, parseURLs, parseMentions);
+
         PostStatusTask statusTask = new PostStatusTask(currUserAuthToken,
                 newStatus, new SimpleNotificationHandler(postStatusObserver));
 

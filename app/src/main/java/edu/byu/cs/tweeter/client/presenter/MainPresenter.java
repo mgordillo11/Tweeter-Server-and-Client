@@ -46,7 +46,7 @@ public class MainPresenter extends Presenter {
         //statusService = getStatusService();
     }
 
-    protected StatusService getStatusService() {
+    public StatusService getStatusService() {
         if (statusService == null) {
             statusService = new StatusService();
         }

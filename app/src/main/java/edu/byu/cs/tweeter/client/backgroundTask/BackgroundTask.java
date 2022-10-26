@@ -35,6 +35,7 @@ public abstract class BackgroundTask implements Runnable {
             sendSuccessMessage();
         } catch (Exception ex) {
             Log.e(LOG_TAG, ex.getMessage(), ex);
+            System.out.println(ex.getMessage());
             sendExceptionMessage(ex);
         }
     }

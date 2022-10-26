@@ -73,9 +73,7 @@ public class MainActivity extends AppCompatActivity implements StatusDialogFragm
             }
         });
 
-        //mainPresenter.updateSelectedUserFollowingAndFollowers(selectedUser);
         updateSelectedUserFollowingAndFollowees();
-
 
         TextView userName = findViewById(R.id.userName);
         userName.setText(selectedUser.getName());

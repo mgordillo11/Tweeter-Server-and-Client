@@ -30,6 +30,8 @@ android {
     testOptions {
         unitTests.all {
             useJUnitPlatform()
+            unitTests.returnDefaultValues = true
+            //unitTests.returnDefaultValues = true
         }
     }
 }
