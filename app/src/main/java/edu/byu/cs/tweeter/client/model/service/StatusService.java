@@ -16,7 +16,7 @@ import edu.byu.cs.tweeter.model.domain.User;
 
 public class StatusService {
 
-        public void loadMoreStories(AuthToken currUserAuthToken, User user, int pageSize, Status lastStatus, PageNotificationObserver<Status> getStoryObserver) {
+    public void loadMoreStories(AuthToken currUserAuthToken, User user, int pageSize, Status lastStatus, PageNotificationObserver<Status> getStoryObserver) {
         GetStoryTask getStoryTask = new GetStoryTask(currUserAuthToken, user, pageSize, lastStatus, new PageNotificationHandler<>(getStoryObserver));
 
         BackgroundTaskUtils.runTask(getStoryTask);

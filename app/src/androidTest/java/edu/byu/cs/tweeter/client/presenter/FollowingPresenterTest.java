@@ -1,19 +1,5 @@
 package edu.byu.cs.tweeter.client.presenter;
 
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
-import org.mockito.invocation.InvocationOnMock;
-import org.mockito.stubbing.Answer;
-
-import java.util.Arrays;
-import java.util.List;
-
-import edu.byu.cs.tweeter.client.model.service.FollowService;
-import edu.byu.cs.tweeter.model.domain.AuthToken;
-import edu.byu.cs.tweeter.model.domain.User;
-
 public class FollowingPresenterTest {
 
 //    private static final String MALE_IMAGE_URL = "https://faculty.cs.byu.edu/~jwilkerson/cs340/tweeter/images/donald_duck.png";

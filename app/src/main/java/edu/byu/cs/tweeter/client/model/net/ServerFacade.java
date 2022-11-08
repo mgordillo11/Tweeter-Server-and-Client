@@ -44,6 +44,17 @@ public class ServerFacade {
 
     private final ClientCommunicator clientCommunicator = new ClientCommunicator(SERVER_URL);
 
+
+//    public <Q extends Request, R extends Response> R request(Q request, String urlPath, Class<R> clazz) throws IOException, TweeterRemoteException {
+//        R response = clientCommunicator.doPost(urlPath, request, null, clazz);
+//
+//        if (!response.isSuccess()) {
+//            throw new RuntimeException(response.getMessage());
+//        }
+//
+//        return response;
+//    }
+
     /**
      * Performs a login and if successful, returns the logged in user and an auth token.
      *

@@ -1,7 +1,6 @@
 package edu.byu.cs.tweeter.client.model.service;
 
-import static org.junit.jupiter.api.Assertions.assertArrayEquals;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -13,23 +12,19 @@ import java.util.List;
 import java.util.concurrent.CountDownLatch;
 
 import edu.byu.cs.tweeter.client.backgroundTask.observer.PageNotificationObserver;
-import edu.byu.cs.tweeter.client.presenter.MainPresenter;
-import edu.byu.cs.tweeter.client.presenter.StoryPresenter;
-import edu.byu.cs.tweeter.client.view.main.MainActivity;
 import edu.byu.cs.tweeter.model.domain.AuthToken;
 import edu.byu.cs.tweeter.model.domain.Status;
 import edu.byu.cs.tweeter.model.domain.User;
 import edu.byu.cs.tweeter.util.FakeData;
 
-public class StatusTest {
+public class StatusServiceTest {
     private User currentUser;
     private AuthToken currentAuthToken;
-    private StoryPresenter presenter;
 
     private StatusService statusServiceSpy;
     private Status lastStatus;
-    private GetItemsObserver observer;
 
+    private GetItemsObserver observer;
     private CountDownLatch countDownLatch;
 
     private final int PAGE_SIZE = 10;
@@ -42,7 +37,6 @@ public class StatusTest {
         currentAuthToken = new AuthToken();
 
         statusServiceSpy = Mockito.spy(new StatusService());
-        //presenter = Mockito.mock(StoryPresenter.class);
 
         observer = new GetItemsObserver();
         resetCountDownLatch();
@@ -62,12 +56,14 @@ public class StatusTest {
         statusServiceSpy.loadMoreStories(currentAuthToken, currentUser, PAGE_SIZE, lastStatus, observer);
         awaitCountDownLatch();
 
-        List<Status> expectedStatuses = getFakeData().getFakeStatuses().subList(0, 10);
+        //List<Status> expectedStatuses = getFakeData().getFakeStatuses().subList(0, 10);
         assertTrue(observer.isSuccess());
         assertNull(observer.getMessage());
+
         //List<Status> actualStatuses = observer.getStories();
         //assertArrayEquals(expectedStatuses.toArray(), actualStatuses.toArray());
         //assertEquals(expectedStatuses, observer.getStories());
+        assertNotNull(observer.getStories());
         assertTrue(observer.getHasMorePages());
         assertNull(observer.getException());
     }

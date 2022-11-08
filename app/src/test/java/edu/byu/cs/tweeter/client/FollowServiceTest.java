@@ -17,7 +17,7 @@ import edu.byu.cs.tweeter.model.net.request.GetFollowersCountRequest;
 import edu.byu.cs.tweeter.model.net.response.FollowersResponse;
 import edu.byu.cs.tweeter.model.net.response.GetFollowersCountResponse;
 
-public class FollowTest {
+public class FollowServiceTest {
     private ServerFacade serverFacade;
 
 
@@ -28,7 +28,8 @@ public class FollowTest {
 
         assertTrue(response.isSuccess());
         assertNotNull(response.getFollowers());
-        assertNotNull(response.getHasMorePages());
+        assertTrue(response.getHasMorePages());
+        assertEquals(10, response.getFollowers().size());
     }
 
     @Test
@@ -38,8 +39,7 @@ public class FollowTest {
         GetFollowersCountResponse response = getServerFacade().getFollowersCount(request, "/getfollowerscount");
 
         assertTrue(response.isSuccess());
-        assertNotNull(response.getCount());
-        assertTrue(response.getCount() >= 0);
+        assertEquals(20, response.getCount());
     }
 
 

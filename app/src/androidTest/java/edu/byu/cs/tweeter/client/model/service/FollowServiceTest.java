@@ -1,18 +1,5 @@
 package edu.byu.cs.tweeter.client.model.service;
 
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
-
-import java.util.List;
-import java.util.concurrent.CountDownLatch;
-
-import edu.byu.cs.tweeter.client.model.net.ServerFacade;
-import edu.byu.cs.tweeter.model.domain.AuthToken;
-import edu.byu.cs.tweeter.model.domain.User;
-import edu.byu.cs.tweeter.util.FakeData;
-
 public class FollowServiceTest {
 
 //    private User currentUser;

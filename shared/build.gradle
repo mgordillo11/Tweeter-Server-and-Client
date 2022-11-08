@@ -6,3 +6,11 @@ java {
     sourceCompatibility = JavaVersion.VERSION_11
     targetCompatibility = JavaVersion.VERSION_11
 }
+
+dependencies {
+    // https://mvnrepository.com/artifact/software.amazon.awssdk/dynamodb-enhanced
+    implementation group: 'software.amazon.awssdk', name: 'dynamodb-enhanced', version: '2.18.11'
+
+    // https://mvnrepository.com/artifact/software.amazon.awssdk/dynamodb
+    implementation group: 'software.amazon.awssdk', name: 'dynamodb', version: '2.18.11'
+}

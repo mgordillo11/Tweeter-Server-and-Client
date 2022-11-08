@@ -31,8 +31,11 @@ android {
         unitTests.all {
             useJUnitPlatform()
             unitTests.returnDefaultValues = true
-            //unitTests.returnDefaultValues = true
         }
+    }
+
+    packagingOptions {
+        resources.excludes.add("META-INF/*")
     }
 }
 

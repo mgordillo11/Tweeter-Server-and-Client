@@ -36,12 +36,12 @@ public class LoginTask extends AuthenticateTask {
             if(response.isSuccess()) {
                 return new Pair<>(response.getUser(), response.getAuthToken());
             } else {
-                throw new RuntimeException("[BadRequest400Exception] Unable to login user");
+                throw new RuntimeException("[Bad Request] Unable to login user");
             }
         } catch (IOException | TweeterRemoteException ex) {
             ex.printStackTrace();
             Log.e(BackgroundTask.EXCEPTION_KEY, ex.getMessage(), ex);
-            throw new RuntimeException("[ServerError500Exception] Unable to login user");
+            throw new RuntimeException("[Server Error] Unable to login user");
         }
 
         //return new Pair<>(loggedInUser, authToken);

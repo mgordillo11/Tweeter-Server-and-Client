@@ -5,13 +5,14 @@ import com.amazonaws.services.lambda.runtime.RequestHandler;
 
 import edu.byu.cs.tweeter.model.net.request.IsFollowerRequest;
 import edu.byu.cs.tweeter.model.net.response.IsFollowerResponse;
+import edu.byu.cs.tweeter.server.dao.DynamoDB.DynamoDBFactory;
 import edu.byu.cs.tweeter.server.service.FollowService;
 
 public class IsFollowerHandler implements RequestHandler<IsFollowerRequest, IsFollowerResponse> {
 
     @Override
     public IsFollowerResponse handleRequest(IsFollowerRequest input, Context context) {
-        FollowService followService = new FollowService();
+        FollowService followService = new FollowService(new DynamoDBFactory());
         return followService.isFollower(input);
     }
 }

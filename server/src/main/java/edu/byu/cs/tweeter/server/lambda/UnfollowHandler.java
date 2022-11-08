@@ -5,13 +5,14 @@ import com.amazonaws.services.lambda.runtime.RequestHandler;
 
 import edu.byu.cs.tweeter.model.net.request.UnfollowRequest;
 import edu.byu.cs.tweeter.model.net.response.UnfollowResponse;
+import edu.byu.cs.tweeter.server.dao.DynamoDB.DynamoDBFactory;
 import edu.byu.cs.tweeter.server.service.FollowService;
 
 public class UnfollowHandler implements RequestHandler<UnfollowRequest, UnfollowResponse> {
 
     @Override
     public UnfollowResponse handleRequest(UnfollowRequest request, Context context) {
-        FollowService followService = new FollowService();
+        FollowService followService = new FollowService(new DynamoDBFactory());
         return followService.unfollow(request);
     }
 }

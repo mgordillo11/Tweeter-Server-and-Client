@@ -25,7 +25,7 @@ public class AuthenticateTest {
         assertNotNull(response.getUser());
         assertNotNull(response.getAuthToken());
 
-        // Verify that the user has the expected values, but because the server end is still using dummy data it will always return the same user which Allen Anderson
+        // Verify that the user has the expected values, but because the server end is still using dummy data it will always return the same user which is Allen Anderson
         assertEquals("Allen", response.getUser().getFirstName());
         assertEquals("Anderson", response.getUser().getLastName());
         assertEquals("@allen", response.getUser().getAlias());

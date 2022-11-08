@@ -1,33 +1,30 @@
-package edu.byu.cs.tweeter.model.domain;
+package edu.byu.cs.tweeter.server.dao.DynamoDB.domain;
 
-import java.io.Serializable;
 import java.util.Objects;
 
-/**
- * Represents a user in the system.
- */
-public class User implements Comparable<User>, Serializable {
-
+public class DynamoDBUser implements Comparable<DynamoDBUser> {
     private String firstName;
     private String lastName;
     private String alias;
+    private String password;
     private String imageUrl;
 
     /**
      * Allows construction of the object from Json. Private so it won't be called by other code.
      */
-    private User() {
+    private DynamoDBUser() {
     }
 
-    public User(String firstName, String lastName, String imageURL) {
-        this(firstName, lastName, String.format("@%s%s", firstName, lastName), imageURL);
+    public DynamoDBUser(String firstName, String lastName, String password, String imageURL) {
+        this(firstName, lastName, String.format("@%s%s", firstName, lastName), password, imageURL);
     }
 
-    public User(String firstName, String lastName, String alias, String imageURL) {
+    public DynamoDBUser(String firstName, String lastName, String alias, String password, String imageURL) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.alias = alias;
         this.imageUrl = imageURL;
+        this.password = password;
     }
 
     public String getFirstName() {
@@ -66,11 +63,19 @@ public class User implements Comparable<User>, Serializable {
         this.imageUrl = imageUrl;
     }
 
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        User user = (User) o;
+        DynamoDBUser user = (DynamoDBUser) o;
         return alias.equals(user.alias);
     }
 
@@ -90,7 +95,7 @@ public class User implements Comparable<User>, Serializable {
     }
 
     @Override
-    public int compareTo(User user) {
+    public int compareTo(DynamoDBUser user) {
         return this.getAlias().compareTo(user.getAlias());
     }
 }
