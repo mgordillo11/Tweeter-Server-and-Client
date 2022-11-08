@@ -51,15 +51,10 @@ public class UserService {
             return new LoginResponse("Invalid credentials");
         }
 
-        User user = daoFactory.getUserDAO().getUser(request.getUsername());
+        User user = daoFactory.getUserDAO().login(request.getUsername());
         AuthToken authToken = daoFactory.getAuthtokenDAO().createAuthToken(request.getUsername());
 
         return new LoginResponse(user, authToken);
-
-//        // TODO: Generates dummy data. Replace with a real implementation.
-//        User user = getDummyUser();
-//        AuthToken authToken = getDummyAuthToken();
-//        return new LoginResponse(user, authToken);
     }
 
     public RegisterResponse register(RegisterRequest request) {
@@ -115,12 +110,6 @@ public class UserService {
          */
 
         return new RegisterResponse(user, authtoken);
-
-
-//        // TODO: Generates dummy data. Replace with a real implementation.
-//        User user = getDummyUser();
-//        AuthToken authToken = getDummyAuthToken();
-//        return new RegisterResponse(user, authToken);
     }
 
     public GetUserResponse getUser(GetUserRequest request) {
@@ -137,9 +126,6 @@ public class UserService {
 
         User user = daoFactory.getUserDAO().getUser(request.getAlias());
         return new GetUserResponse(user);
-
-//        // TODO: Get the user from the database. Replace with a real implementation.
-//        return new GetUserResponse(getFakeData().findUserByAlias(request.getAlias()));
     }
 
     public LogoutResponse logout(LogoutRequest request) {
@@ -148,38 +134,5 @@ public class UserService {
         }
 
         return daoFactory.getAuthtokenDAO().logout(request.getAuthtoken());
-
-//        // TODO: Clear the auth token from the database. Replace with a real implementation.
-//        return new LogoutResponse();
-    }
-
-    /**
-     * Returns the dummy user to be returned by the login operation.
-     * This is written as a separate method to allow mocking of the dummy user.
-     *
-     * @return a dummy user.
-     */
-    User getDummyUser() {
-        return getFakeData().getFirstUser();
-    }
-
-    /**
-     * Returns the dummy auth token to be returned by the login operation.
-     * This is written as a separate method to allow mocking of the dummy auth token.
-     *
-     * @return a dummy auth token.
-     */
-    AuthToken getDummyAuthToken() {
-        return getFakeData().getAuthToken();
-    }
-
-    /**
-     * Returns the {@link FakeData} object used to generate dummy users and auth tokens.
-     * This is written as a separate method to allow mocking of the {@link FakeData}.
-     *
-     * @return a {@link FakeData} instance.
-     */
-    FakeData getFakeData() {
-        return FakeData.getInstance();
     }
 }

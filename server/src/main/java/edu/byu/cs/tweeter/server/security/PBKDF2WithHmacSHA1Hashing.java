@@ -8,6 +8,7 @@ import java.security.spec.InvalidKeySpecException;
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
 
+
 // This is very high security
 public class PBKDF2WithHmacSHA1Hashing {
 
@@ -64,4 +65,5 @@ public class PBKDF2WithHmacSHA1Hashing {
             return hex;
         }
     }
+
 }

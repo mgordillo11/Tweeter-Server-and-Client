@@ -36,10 +36,16 @@ public class DynamoDBAuthtokenDAO extends DynamoDBMainDAO implements IAuthtokenD
 
     @Override
     public LogoutResponse logout(AuthToken authToken) {
-
         try {
             Key key = Key.builder().partitionValue(authToken.getToken()).build();
-            table.deleteItem(key);
+
+            AuthToken deletedAuthtoken = table.deleteItem(key);
+
+            // Don't know if I need to check if the token was deleted
+            if (deletedAuthtoken == null) {
+                return new LogoutResponse("Failed to delete authtoken");
+            }
+
         } catch (Exception e) {
             System.err.println("Unable to delete auth token");
             System.err.println(e.getMessage());

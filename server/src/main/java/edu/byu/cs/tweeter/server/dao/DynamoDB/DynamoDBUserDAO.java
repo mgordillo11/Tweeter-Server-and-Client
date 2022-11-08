@@ -14,13 +14,26 @@ public class DynamoDBUserDAO extends DynamoDBMainDAO implements IUserDAO {
     private final DynamoDbTable<DynamoDBUser> table = enhancedClient.table(TABLE_NAME, TableSchema.fromBean(DynamoDBUser.class));
 
     @Override
-    public User login(String username, String password) {
-        return null;
+    public User login(String username) {
+        try {
+            return getUser(username);
+        } catch (Exception e) {
+            System.err.println("Unable to get user");
+            System.err.println(e.getMessage());
+            return null;
+        }
     }
 
     @Override
     public void register(String username, String password, String firstName, String lastName, String imageURL) {
+        DynamoDBUser user = new DynamoDBUser(firstName, lastName, username, password, imageURL);
 
+        try {
+            table.putItem(user);
+        } catch (Exception e) {
+            System.err.println("Unable to add user");
+            System.err.println(e.getMessage());
+        }
     }
 
     @Override
@@ -29,16 +42,15 @@ public class DynamoDBUserDAO extends DynamoDBMainDAO implements IUserDAO {
         return new User(user.getAlias(), user.getFirstName(), user.getLastName(), user.getImageUrl());
     }
 
+    @Override
+    public String getHashedPassword(String username) {
+        return getCompleteUser(username).getPassword();
+    }
 
     public DynamoDBUser getCompleteUser(String username) {
         Key key = Key.builder().partitionValue(username).build();
 
         return table.getItem(
                 (GetItemEnhancedRequest.Builder requestBuilder) -> requestBuilder.key(key));
-    }
-
-    @Override
-    public String getHashedPassword(String username) {
-        return getCompleteUser(username).getPassword();
     }
 }

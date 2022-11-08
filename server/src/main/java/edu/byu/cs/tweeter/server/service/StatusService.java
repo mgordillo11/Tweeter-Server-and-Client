@@ -14,14 +14,13 @@ import edu.byu.cs.tweeter.util.FakeData;
 import edu.byu.cs.tweeter.util.Pair;
 
 public class StatusService {
-    private DAOFactory daoFactory;
+    private final DAOFactory daoFactory;
 
     public StatusService(DAOFactory daoFactory) {
         this.daoFactory = daoFactory;
     }
 
     public PostStatusResponse postStatus(PostStatusRequest request) {
-        // Eventually, this will post the status to the database.
         if (request.getStatus() == null) {
             throw new RuntimeException("[Bad Request] Status is null");
         } else if (request.getAuthToken() == null) {
@@ -63,10 +62,6 @@ public class StatusService {
         }
 
         return daoFactory.getStoryDAO().getStory(request);
-
-//        // Eventually, this will get the story from the database.
-//        Pair<List<Status>, Boolean> storyInfo = getFakeData().getPageOfStatus(request.getLastStatus(), request.getLimit());
-//        return new StoryResponse(storyInfo.getFirst(), storyInfo.getSecond());
     }
 
     public FeedResponse getFeed(FeedRequest request) {
@@ -86,19 +81,5 @@ public class StatusService {
         }
 
         return daoFactory.getFeedDAO().getFeed(request);
-
-//        // Eventually, this will get the feed from the database.
-//        Pair<List<Status>, Boolean> feedInfo = getFakeData().getPageOfStatus(request.getLastStatus(), request.getLimit());
-//        return new FeedResponse(feedInfo.getFirst(), feedInfo.getSecond());
-    }
-
-    /**
-     * Returns the {@link FakeData} object used to generate dummy users and auth tokens.
-     * This is written as a separate method to allow mocking of the {@link FakeData}.
-     *
-     * @return a {@link FakeData} instance.
-     */
-    FakeData getFakeData() {
-        return FakeData.getInstance();
     }
 }

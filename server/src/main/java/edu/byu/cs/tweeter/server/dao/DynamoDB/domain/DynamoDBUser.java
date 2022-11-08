@@ -2,6 +2,10 @@ package edu.byu.cs.tweeter.server.dao.DynamoDB.domain;
 
 import java.util.Objects;
 
+import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbBean;
+import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbPartitionKey;
+
+@DynamoDbBean
 public class DynamoDBUser implements Comparable<DynamoDBUser> {
     private String firstName;
     private String lastName;
@@ -47,6 +51,7 @@ public class DynamoDBUser implements Comparable<DynamoDBUser> {
         return String.format("%s %s", firstName, lastName);
     }
 
+    @DynamoDbPartitionKey
     public String getAlias() {
         return alias;
     }

@@ -49,7 +49,15 @@ public class FollowService {
             throw new RuntimeException("[Bad Request] Request needs to have a positive limit");
         }
 
-        return getFollowingDAO().getFollowees(request);
+        boolean validAuthtoken = daoFactory.getAuthtokenDAO().isValidAuthToken(request.getAuthtoken());
+        if(!validAuthtoken) {
+            return new FollowingResponse("Authtoken is invalid, and User is no longer active");
+        }
+
+
+        return new FollowingResponse(followees.getFirst(), followees.getSecond());
+
+        //return getFollowingDAO().getFollowees(request);
     }
 
     public FollowersResponse getFollowers(FollowersRequest request) {
