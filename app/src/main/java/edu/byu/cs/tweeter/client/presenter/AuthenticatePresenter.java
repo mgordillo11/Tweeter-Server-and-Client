@@ -2,7 +2,7 @@ package edu.byu.cs.tweeter.client.presenter;
 
 import edu.byu.cs.tweeter.client.backgroundTask.observer.AuthenticateNotificationObserver;
 import edu.byu.cs.tweeter.client.cache.Cache;
-import edu.byu.cs.tweeter.model.domain.AuthToken;
+import edu.byu.cs.tweeter.model.domain.Authtoken;
 import edu.byu.cs.tweeter.model.domain.User;
 
 public abstract class AuthenticatePresenter extends Presenter {
@@ -48,7 +48,7 @@ public abstract class AuthenticatePresenter extends Presenter {
     public class AuthenticateUserObserver implements AuthenticateNotificationObserver {
 
         @Override
-        public void handleSuccess(User registeredUser, AuthToken authToken) {
+        public void handleSuccess(User registeredUser, Authtoken authToken) {
             Cache.getInstance().setCurrUser(registeredUser);
             Cache.getInstance().setCurrUserAuthToken(authToken);
 

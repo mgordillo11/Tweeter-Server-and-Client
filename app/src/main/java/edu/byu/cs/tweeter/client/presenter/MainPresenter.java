@@ -2,6 +2,8 @@ package edu.byu.cs.tweeter.client.presenter;
 
 import android.util.Log;
 
+import java.sql.Time;
+import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -83,11 +85,18 @@ public class MainPresenter extends Presenter {
         followService.updateSelectedUserFollowingAndFollowers(Cache.getInstance().getCurrUserAuthToken(), selectedUser, new GetFollowersCountObserver(), new GetFollowingCountObserver());
     }
 
-    public String getFormattedDateTime() throws ParseException {
-        SimpleDateFormat userFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-        SimpleDateFormat statusFormat = new SimpleDateFormat("MMM d yyyy h:mm aaa");
+//    public String getFormattedDateTime() throws ParseException {
+//        SimpleDateFormat userFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+//        SimpleDateFormat statusFormat = new SimpleDateFormat("MMM d yyyy h:mm aaa");
+//        String test1 = LocalDate.now().toString();
+//        String test2 = LocalTime.now().toString().substring(0, 8);
+//
+//        return statusFormat.format(userFormat.parse(LocalDate.now().toString() + " " + LocalTime.now().toString().substring(0, 8)));
+//    }
 
-        return statusFormat.format(userFormat.parse(LocalDate.now().toString() + " " + LocalTime.now().toString().substring(0, 8)));
+    public String getFormattedDateTime() {
+        Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+        return timestamp.toString();
     }
 
     public List<String> parseURLs(String post) {

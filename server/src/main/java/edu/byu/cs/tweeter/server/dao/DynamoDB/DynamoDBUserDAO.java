@@ -39,7 +39,7 @@ public class DynamoDBUserDAO extends DynamoDBMainDAO implements IUserDAO {
     @Override
     public User getUser(String username) {
         DynamoDBUser user = getCompleteUser(username);
-        return new User(user.getAlias(), user.getFirstName(), user.getLastName(), user.getImageUrl());
+        return new User(user.getFirstName(), user.getLastName(), user.getAlias(), user.getImageUrl());
     }
 
     @Override

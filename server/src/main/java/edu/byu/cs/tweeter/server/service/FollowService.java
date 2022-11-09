@@ -55,9 +55,8 @@ public class FollowService {
         }
 
 
+        Pair<List<User>, Boolean> followees = daoFactory.getFollowDAO().getFollowees(request);
         return new FollowingResponse(followees.getFirst(), followees.getSecond());
-
-        //return getFollowingDAO().getFollowees(request);
     }
 
     public FollowersResponse getFollowers(FollowersRequest request) {
@@ -71,12 +70,13 @@ public class FollowService {
             throw new RuntimeException("[Bad Request] Request needs to have a last follower alias");
         }
 
-        User lastUser = getFakeData().findUserByAlias(request.getLastFollowerAlias());
-        User targetUser = getFakeData().findUserByAlias(request.getFollowerAlias());
+        boolean validAuthtoken = daoFactory.getAuthtokenDAO().isValidAuthToken(request.getAuthtoken());
+        if(!validAuthtoken) {
+            return new FollowersResponse("Authtoken is invalid, and User is no longer active");
+        }
 
-        Pair<List<User>, Boolean> data = getFakeData().getPageOfUsers(lastUser, request.getLimit(), targetUser);
-
-        return new FollowersResponse(data.getFirst(), data.getSecond());
+        Pair<List<User>, Boolean> followers = daoFactory.getFollowDAO().getFollowers(request);
+        return new FollowersResponse(followers.getFirst(), followers.getSecond());
     }
 
     public UnfollowResponse unfollow(UnfollowRequest request) {
@@ -84,6 +84,11 @@ public class FollowService {
             throw new RuntimeException("[Bad Request] Request needs to have a user to unfollow");
         } else if (request.getAuthtoken() == null) {
             throw new RuntimeException("[Bad Request] Request needs to have an auth token");
+        }
+
+        boolean validAuthtoken = daoFactory.getAuthtokenDAO().isValidAuthToken(request.getAuthtoken());
+        if(!validAuthtoken) {
+            return new UnfollowResponse("Authtoken is invalid, and User is no longer active");
         }
 
         return new UnfollowResponse();
@@ -96,7 +101,15 @@ public class FollowService {
             throw new RuntimeException("[Bad Request] Request needs to have an auth token");
         }
 
-        return new FollowResponse();
+        boolean validAuthtoken = daoFactory.getAuthtokenDAO().isValidAuthToken(request.getAuthtoken());
+        if(!validAuthtoken) {
+            return new FollowResponse("Authtoken is invalid, and User is no longer active");
+        }
+
+        String currentUserAlias = daoFactory.getAuthtokenDAO().getAliasFromAuthToken(request.getAuthtoken());
+        String userToFollowAlias = request.getUser().getAlias();
+
+        return daoFactory.getFollowDAO().follow(currentUserAlias, userToFollowAlias);
     }
 
     public IsFollowerResponse isFollower(IsFollowerRequest request) {
@@ -108,7 +121,12 @@ public class FollowService {
             throw new RuntimeException("[Bad Request] Request needs to have a followee");
         }
 
-        return new IsFollowerResponse(new Random().nextInt() > 0);
+        boolean validAuthtoken = daoFactory.getAuthtokenDAO().isValidAuthToken(request.getAuthtoken());
+        if(!validAuthtoken) {
+            return new IsFollowerResponse("Authtoken is invalid, and User is no longer active");
+        }
+
+        return daoFactory.getFollowDAO().isFollowing(request);
     }
 
     public GetFollowingCountResponse getFollowingCount(GetFollowingCountRequest request) {
@@ -118,7 +136,13 @@ public class FollowService {
             throw new RuntimeException("[Bad Request] Request needs to have a user");
         }
 
-        return new GetFollowingCountResponse(20);
+        boolean validAuthtoken = daoFactory.getAuthtokenDAO().isValidAuthToken(request.getAuthtoken());
+        if(!validAuthtoken) {
+            return new GetFollowingCountResponse("Authtoken is invalid, and User is no longer active");
+        }
+
+        int numOfFollowees = daoFactory.getFollowDAO().getFollowingCount(request.getUser().getAlias());
+        return new GetFollowingCountResponse(numOfFollowees);
     }
 
     public GetFollowersCountResponse getFollowersCount(GetFollowersCountRequest request) {
@@ -128,27 +152,12 @@ public class FollowService {
             throw new RuntimeException("[Bad Request] Request needs to have a user");
         }
 
-        return new GetFollowersCountResponse(20);
-    }
+        boolean validAuthtoken = daoFactory.getAuthtokenDAO().isValidAuthToken(request.getAuthtoken());
+        if(!validAuthtoken) {
+            return new GetFollowersCountResponse("Authtoken is invalid, and User is no longer active");
+        }
 
-    /**
-     * Returns an instance of {@link FollowDAO}. Allows mocking of the FollowDAO class
-     * for testing purposes. All usages of FollowDAO should get their FollowDAO
-     * instance from this method to allow for mocking of the instance.
-     *
-     * @return the instance.
-     */
-    FollowDAO getFollowingDAO() {
-        return new FollowDAO();
-    }
-
-    /**
-     * Returns the {@link FakeData} object used to generate dummy users and auth tokens.
-     * This is written as a separate method to allow mocking of the {@link FakeData}.
-     *
-     * @return a {@link FakeData} instance.
-     */
-    FakeData getFakeData() {
-        return FakeData.getInstance();
+        int numOfFollowers = daoFactory.getFollowDAO().getFollowersCount(request.getUser().getAlias());
+        return new GetFollowersCountResponse(numOfFollowers);
     }
 }

@@ -16,13 +16,13 @@ import edu.byu.cs.tweeter.client.backgroundTask.observer.CountNotificationObserv
 import edu.byu.cs.tweeter.client.backgroundTask.observer.FollowUserStatusObserver;
 import edu.byu.cs.tweeter.client.backgroundTask.observer.IsFollowerNotificationObserver;
 import edu.byu.cs.tweeter.client.backgroundTask.observer.PageNotificationObserver;
-import edu.byu.cs.tweeter.model.domain.AuthToken;
+import edu.byu.cs.tweeter.model.domain.Authtoken;
 import edu.byu.cs.tweeter.model.domain.User;
 
 public class FollowService {
 
     //This is to load more followees
-    public void loadMoreFollowees(AuthToken currUserAuthToken, User user, int pageSize, User lastFollowee, PageNotificationObserver<User> getFolloweesUserObserver) {
+    public void loadMoreFollowees(Authtoken currUserAuthToken, User user, int pageSize, User lastFollowee, PageNotificationObserver<User> getFolloweesUserObserver) {
         GetFollowingTask getFollowingTask = new GetFollowingTask(currUserAuthToken,
                 user, pageSize, lastFollowee, new PageNotificationHandler<>(getFolloweesUserObserver));
 
@@ -30,35 +30,35 @@ public class FollowService {
     }
 
     //This is to load more followers
-    public void loadMoreFollowers(AuthToken currUserAuthToken, User user, int pageSize, User lastFollower, PageNotificationObserver<User> getFollowersUserObserver) {
+    public void loadMoreFollowers(Authtoken currUserAuthToken, User user, int pageSize, User lastFollower, PageNotificationObserver<User> getFollowersUserObserver) {
         GetFollowersTask getFollowersTask = new GetFollowersTask(currUserAuthToken,
                 user, pageSize, lastFollower, new PageNotificationHandler<>(getFollowersUserObserver));
 
         BackgroundTaskUtils.runTask(getFollowersTask);
     }
 
-    public void followUser(AuthToken authToken, User selectedUser, FollowUserStatusObserver followUserObserver) {
+    public void followUser(Authtoken authToken, User selectedUser, FollowUserStatusObserver followUserObserver) {
         FollowTask followTask = new FollowTask(authToken,
                 selectedUser, new FollowStatusHandler(followUserObserver));
 
         BackgroundTaskUtils.runTask(followTask);
     }
 
-    public void unfollowUser(AuthToken authToken, User selectedUser, FollowUserStatusObserver unfollowUserObserver) {
+    public void unfollowUser(Authtoken authToken, User selectedUser, FollowUserStatusObserver unfollowUserObserver) {
         UnfollowTask unfollowTask = new UnfollowTask(authToken,
                 selectedUser, new FollowStatusHandler(unfollowUserObserver));
 
         BackgroundTaskUtils.runTask(unfollowTask);
     }
 
-    public void isFollower(AuthToken currUserAuthToken, User currUser, User selectedUser, IsFollowerNotificationObserver isFollowerNotificationObserver) {
+    public void isFollower(Authtoken currUserAuthToken, User currUser, User selectedUser, IsFollowerNotificationObserver isFollowerNotificationObserver) {
         IsFollowerTask isFollowerTask = new IsFollowerTask(currUserAuthToken,
                 currUser, selectedUser, new IsFollowerNotificationHandler(isFollowerNotificationObserver));
 
         BackgroundTaskUtils.runTask(isFollowerTask);
     }
 
-    public void updateSelectedUserFollowingAndFollowers(AuthToken authToken, User selectedUser, CountNotificationObserver getFollowersCountObserver, CountNotificationObserver getFollowingCountObserver) {
+    public void updateSelectedUserFollowingAndFollowers(Authtoken authToken, User selectedUser, CountNotificationObserver getFollowersCountObserver, CountNotificationObserver getFollowingCountObserver) {
         // Get count of most recently selected user's followers.
         GetFollowersCountTask followersCountTask = new GetFollowersCountTask(authToken,
                 selectedUser, new CountNotificationHandler(getFollowersCountObserver));

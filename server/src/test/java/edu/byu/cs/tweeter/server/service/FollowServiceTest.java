@@ -7,7 +7,7 @@ import org.mockito.Mockito;
 
 import java.util.Arrays;
 
-import edu.byu.cs.tweeter.model.domain.AuthToken;
+import edu.byu.cs.tweeter.model.domain.Authtoken;
 import edu.byu.cs.tweeter.model.domain.User;
 import edu.byu.cs.tweeter.model.net.request.FollowingRequest;
 import edu.byu.cs.tweeter.model.net.response.FollowingResponse;
@@ -22,7 +22,7 @@ public class FollowServiceTest {
 
     @BeforeEach
     public void setup() {
-        AuthToken authToken = new AuthToken();
+        Authtoken authToken = new Authtoken();
 
         User currentUser = new User("FirstName", "LastName", null);
 

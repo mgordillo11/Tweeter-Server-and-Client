@@ -11,10 +11,10 @@ import edu.byu.cs.tweeter.client.backgroundTask.handler.SimpleNotificationHandle
 import edu.byu.cs.tweeter.client.backgroundTask.observer.AuthenticateNotificationObserver;
 import edu.byu.cs.tweeter.client.backgroundTask.observer.GetUserObserver;
 import edu.byu.cs.tweeter.client.backgroundTask.observer.SimpleNotificationObserver;
-import edu.byu.cs.tweeter.model.domain.AuthToken;
+import edu.byu.cs.tweeter.model.domain.Authtoken;
 
 public class UserService {
-    public void getUserProfile(AuthToken currUserAuthToken, String userAlias, GetUserObserver observer) {
+    public void getUserProfile(Authtoken currUserAuthToken, String userAlias, GetUserObserver observer) {
         GetUserTask getUserTask = new GetUserTask(currUserAuthToken,
                 userAlias, new GetUserHandler(observer));
 
@@ -35,7 +35,7 @@ public class UserService {
         BackgroundTaskUtils.runTask(loginTask);
     }
 
-    public void logoutUser(AuthToken authToken, SimpleNotificationObserver logoutUserObserver) {
+    public void logoutUser(Authtoken authToken, SimpleNotificationObserver logoutUserObserver) {
         LogoutTask logoutTask = new LogoutTask(authToken, new SimpleNotificationHandler(logoutUserObserver));
 
         BackgroundTaskUtils.runTask(logoutTask);

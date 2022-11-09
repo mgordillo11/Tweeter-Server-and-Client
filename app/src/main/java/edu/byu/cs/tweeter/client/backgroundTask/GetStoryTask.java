@@ -6,7 +6,7 @@ import android.util.Log;
 import java.io.IOException;
 import java.util.List;
 
-import edu.byu.cs.tweeter.model.domain.AuthToken;
+import edu.byu.cs.tweeter.model.domain.Authtoken;
 import edu.byu.cs.tweeter.model.domain.Status;
 import edu.byu.cs.tweeter.model.domain.User;
 import edu.byu.cs.tweeter.model.net.TweeterRemoteException;
@@ -20,15 +20,13 @@ import edu.byu.cs.tweeter.util.Pair;
 public class GetStoryTask extends PagedTask<Status> {
     private static final String LOG_TAG = "GetStoryTask";
 
-    public GetStoryTask(AuthToken authToken, User targetUser, int limit, Status lastStatus,
+    public GetStoryTask(Authtoken authToken, User targetUser, int limit, Status lastStatus,
                         Handler messageHandler) {
         super(messageHandler, authToken, targetUser, limit, lastStatus);
     }
 
     @Override
     protected Pair<List<Status>, Boolean> getItems() {
-        //return getFakeData().getPageOfStatus(getLastItem(), getLimit());
-
         if (getLastItem() == null) {
             lastItem = getFakeData().getFakeStatuses().get(0);
         }

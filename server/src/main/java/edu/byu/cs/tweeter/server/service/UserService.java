@@ -1,6 +1,6 @@
 package edu.byu.cs.tweeter.server.service;
 
-import edu.byu.cs.tweeter.model.domain.AuthToken;
+import edu.byu.cs.tweeter.model.domain.Authtoken;
 import edu.byu.cs.tweeter.model.domain.User;
 import edu.byu.cs.tweeter.model.net.request.GetUserRequest;
 import edu.byu.cs.tweeter.model.net.request.LoginRequest;
@@ -12,7 +12,6 @@ import edu.byu.cs.tweeter.model.net.response.LogoutResponse;
 import edu.byu.cs.tweeter.model.net.response.RegisterResponse;
 import edu.byu.cs.tweeter.server.dao.DAOFactory;
 import edu.byu.cs.tweeter.server.security.PBKDF2WithHmacSHA1Hashing;
-import edu.byu.cs.tweeter.util.FakeData;
 
 public class UserService {
     private final DAOFactory daoFactory;
@@ -52,7 +51,7 @@ public class UserService {
         }
 
         User user = daoFactory.getUserDAO().login(request.getUsername());
-        AuthToken authToken = daoFactory.getAuthtokenDAO().createAuthToken(request.getUsername());
+        Authtoken authToken = daoFactory.getAuthtokenDAO().createAuthToken(request.getUsername());
 
         return new LoginResponse(user, authToken);
     }
@@ -94,7 +93,7 @@ public class UserService {
         daoFactory.getUserDAO().register(request.getUsername(), request.getPassword(), request.getFirstName(), request.getLastName(), imageURL);
 
         // Create an auth token for the new user's current session and retrieve the user's profile
-        AuthToken authtoken = daoFactory.getAuthtokenDAO().createAuthToken(request.getUsername());
+        Authtoken authtoken = daoFactory.getAuthtokenDAO().createAuthToken(request.getUsername());
 
         //User user = daoFactory.getUserDAO().getUser(request.getUsername());
         User user = new User(request.getFirstName(), request.getLastName(),

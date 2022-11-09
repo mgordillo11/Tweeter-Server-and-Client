@@ -3,7 +3,7 @@ package edu.byu.cs.tweeter.client.backgroundTask;
 import android.os.Bundle;
 import android.os.Handler;
 
-import edu.byu.cs.tweeter.model.domain.AuthToken;
+import edu.byu.cs.tweeter.model.domain.Authtoken;
 import edu.byu.cs.tweeter.model.domain.User;
 
 public abstract class GetCountTask extends AuthenticatedTask {
@@ -17,7 +17,7 @@ public abstract class GetCountTask extends AuthenticatedTask {
 
     private int count;
 
-    public GetCountTask(Handler messageHandler, AuthToken authToken, User targetUser) {
+    public GetCountTask(Handler messageHandler, Authtoken authToken, User targetUser) {
         super(messageHandler, authToken);
         this.targetUser = targetUser;
     }

@@ -1,6 +1,6 @@
 package edu.byu.cs.tweeter.model.net.request;
 
-import edu.byu.cs.tweeter.model.domain.AuthToken;
+import edu.byu.cs.tweeter.model.domain.Authtoken;
 
 /**
  * Contains all the information needed to make a request to have the server return the next page of
@@ -8,7 +8,7 @@ import edu.byu.cs.tweeter.model.domain.AuthToken;
  */
 public class FollowingRequest {
 
-    private AuthToken authtoken;
+    private Authtoken authtoken;
     private String followerAlias;
     private int limit;
     private String lastFolloweeAlias;
@@ -27,7 +27,7 @@ public class FollowingRequest {
      *                     there was no previous request or if no followees were returned in the
      *                     previous request).
      */
-    public FollowingRequest(AuthToken authtoken, String followerAlias, int limit, String lastFolloweeAlias) {
+    public FollowingRequest(Authtoken authtoken, String followerAlias, int limit, String lastFolloweeAlias) {
         this.authtoken = authtoken;
         this.followerAlias = followerAlias;
         this.limit = limit;
@@ -39,7 +39,7 @@ public class FollowingRequest {
      *
      * @return the auth token.
      */
-    public AuthToken getAuthtoken() {
+    public Authtoken getAuthtoken() {
         return authtoken;
     }
 
@@ -48,7 +48,7 @@ public class FollowingRequest {
      *
      * @param authtoken the auth token.
      */
-    public void setAuthtoken(AuthToken authtoken) {
+    public void setAuthtoken(Authtoken authtoken) {
         this.authtoken = authtoken;
     }
 

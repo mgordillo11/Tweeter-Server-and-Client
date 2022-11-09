@@ -6,7 +6,7 @@ import android.util.Log;
 
 import java.io.IOException;
 
-import edu.byu.cs.tweeter.model.domain.AuthToken;
+import edu.byu.cs.tweeter.model.domain.Authtoken;
 import edu.byu.cs.tweeter.model.domain.User;
 import edu.byu.cs.tweeter.model.net.TweeterRemoteException;
 import edu.byu.cs.tweeter.model.net.request.FollowRequest;
@@ -23,7 +23,7 @@ public class FollowTask extends AuthenticatedTask {
      */
     private User followee;
 
-    public FollowTask(AuthToken authToken, User followee, Handler messageHandler) {
+    public FollowTask(Authtoken authToken, User followee, Handler messageHandler) {
         super(messageHandler, authToken);
         this.followee = followee;
     }

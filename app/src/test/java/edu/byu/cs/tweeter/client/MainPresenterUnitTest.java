@@ -15,7 +15,7 @@ import edu.byu.cs.tweeter.client.backgroundTask.observer.SimpleNotificationObser
 import edu.byu.cs.tweeter.client.cache.Cache;
 import edu.byu.cs.tweeter.client.model.service.StatusService;
 import edu.byu.cs.tweeter.client.presenter.MainPresenter;
-import edu.byu.cs.tweeter.model.domain.AuthToken;
+import edu.byu.cs.tweeter.model.domain.Authtoken;
 import edu.byu.cs.tweeter.model.domain.User;
 
 public class MainPresenterUnitTest {
@@ -33,7 +33,7 @@ public class MainPresenterUnitTest {
 
         mainPresenterSpy = Mockito.spy(new MainPresenter(mockMainView));
 
-        Cache.getInstance().setCurrUserAuthToken(new AuthToken("token"));
+        Cache.getInstance().setCurrUserAuthToken(new Authtoken("token"));
         Mockito.when(mainPresenterSpy.getStatusService()).thenReturn(mockStatusService);
     }
 
@@ -41,7 +41,7 @@ public class MainPresenterUnitTest {
         @Override
         public Void answer(InvocationOnMock invocation) {
 
-            assertTrue(invocation.getArgument(0) instanceof AuthToken);
+            assertTrue(invocation.getArgument(0) instanceof Authtoken);
             assertTrue(invocation.getArgument(1) instanceof User);
             assertTrue(invocation.getArgument(2) instanceof String);
             assertTrue(invocation.getArgument(3) instanceof String);
@@ -108,7 +108,7 @@ public class MainPresenterUnitTest {
     }
 
     private void runDoAnswerWhen(AnswerUse answer) {
-        Mockito.doAnswer(answer).when(mockStatusService).postStatus(Mockito.any(AuthToken.class),
+        Mockito.doAnswer(answer).when(mockStatusService).postStatus(Mockito.any(Authtoken.class),
                 Mockito.any(User.class), Mockito.anyString(), Mockito.anyString(), Mockito.anyList(), Mockito.anyList(), Mockito.any(SimpleNotificationObserver.class));
     }
 

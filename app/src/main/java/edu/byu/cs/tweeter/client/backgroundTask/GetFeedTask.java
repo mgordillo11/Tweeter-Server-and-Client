@@ -6,7 +6,7 @@ import android.util.Log;
 import java.io.IOException;
 import java.util.List;
 
-import edu.byu.cs.tweeter.model.domain.AuthToken;
+import edu.byu.cs.tweeter.model.domain.Authtoken;
 import edu.byu.cs.tweeter.model.domain.Status;
 import edu.byu.cs.tweeter.model.domain.User;
 import edu.byu.cs.tweeter.model.net.TweeterRemoteException;
@@ -20,7 +20,7 @@ import edu.byu.cs.tweeter.util.Pair;
 public class GetFeedTask extends PagedTask<Status> {
     private static final String LOG_TAG = "GetFeedTask";
 
-    public GetFeedTask(AuthToken authToken, User targetUser, int limit, Status lastStatus,
+    public GetFeedTask(Authtoken authToken, User targetUser, int limit, Status lastStatus,
                        Handler messageHandler) {
         super(messageHandler, authToken, targetUser, limit, lastStatus);
     }
@@ -46,6 +46,5 @@ public class GetFeedTask extends PagedTask<Status> {
             Log.e(BackgroundTask.EXCEPTION_KEY, ex.getMessage(), ex);
             throw new RuntimeException("[Server Error] Unable to retrieve feed");
         }
-        //return getFakeData().getPageOfStatus(getLastItem(), getLimit());
     }
 }

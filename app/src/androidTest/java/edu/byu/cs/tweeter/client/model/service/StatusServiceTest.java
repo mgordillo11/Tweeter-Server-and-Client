@@ -12,14 +12,14 @@ import java.util.List;
 import java.util.concurrent.CountDownLatch;
 
 import edu.byu.cs.tweeter.client.backgroundTask.observer.PageNotificationObserver;
-import edu.byu.cs.tweeter.model.domain.AuthToken;
+import edu.byu.cs.tweeter.model.domain.Authtoken;
 import edu.byu.cs.tweeter.model.domain.Status;
 import edu.byu.cs.tweeter.model.domain.User;
 import edu.byu.cs.tweeter.util.FakeData;
 
 public class StatusServiceTest {
     private User currentUser;
-    private AuthToken currentAuthToken;
+    private Authtoken currentAuthToken;
 
     private StatusService statusServiceSpy;
     private Status lastStatus;
@@ -34,7 +34,7 @@ public class StatusServiceTest {
         lastStatus = getFakeData().getFakeStatuses().get(0);
 
         currentUser = new User("FirstName", "LastName", null);
-        currentAuthToken = new AuthToken();
+        currentAuthToken = new Authtoken();
 
         statusServiceSpy = Mockito.spy(new StatusService());
 

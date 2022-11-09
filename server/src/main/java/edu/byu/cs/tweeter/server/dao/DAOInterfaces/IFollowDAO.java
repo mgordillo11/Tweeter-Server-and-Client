@@ -22,5 +22,9 @@ public interface IFollowDAO {
 
     IsFollowerResponse isFollowing(IsFollowerRequest request);
 
+    int getFollowingCount(String alias);
 
+    int getFollowersCount(String alias);
+
+    List<String> getFollowersAlias(String alias);
 }

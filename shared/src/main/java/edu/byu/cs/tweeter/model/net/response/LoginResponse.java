@@ -1,6 +1,6 @@
 package edu.byu.cs.tweeter.model.net.response;
 
-import edu.byu.cs.tweeter.model.domain.AuthToken;
+import edu.byu.cs.tweeter.model.domain.Authtoken;
 import edu.byu.cs.tweeter.model.domain.User;
 import edu.byu.cs.tweeter.model.net.request.LoginRequest;
 
@@ -10,7 +10,7 @@ import edu.byu.cs.tweeter.model.net.request.LoginRequest;
 public class LoginResponse extends Response {
 
     private User user;
-    private AuthToken authToken;
+    private Authtoken authToken;
 
     /**
      * Creates a response indicating that the corresponding request was unsuccessful.
@@ -27,7 +27,7 @@ public class LoginResponse extends Response {
      * @param user the now logged in user.
      * @param authToken the auth token representing this user's session with the server.
      */
-    public LoginResponse(User user, AuthToken authToken) {
+    public LoginResponse(User user, Authtoken authToken) {
         super(true, null);
         this.user = user;
         this.authToken = authToken;
@@ -47,7 +47,7 @@ public class LoginResponse extends Response {
      *
      * @return the auth token.
      */
-    public AuthToken getAuthToken() {
+    public Authtoken getAuthToken() {
         return authToken;
     }
 }

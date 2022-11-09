@@ -6,7 +6,7 @@ import android.os.Handler;
 import java.io.Serializable;
 import java.util.List;
 
-import edu.byu.cs.tweeter.model.domain.AuthToken;
+import edu.byu.cs.tweeter.model.domain.Authtoken;
 import edu.byu.cs.tweeter.model.domain.User;
 import edu.byu.cs.tweeter.util.Pair;
 
@@ -35,7 +35,7 @@ public abstract class PagedTask<T> extends AuthenticatedTask {
     private List<T> items;
     private boolean hasMorePages;
 
-    public PagedTask(Handler messageHandler, AuthToken authToken, User targetUser, int limit, T lastItem) {
+    public PagedTask(Handler messageHandler, Authtoken authToken, User targetUser, int limit, T lastItem) {
         super(messageHandler, authToken);
         this.targetUser = targetUser;
         this.limit = limit;

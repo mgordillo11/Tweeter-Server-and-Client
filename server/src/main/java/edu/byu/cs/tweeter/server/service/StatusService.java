@@ -3,6 +3,7 @@ package edu.byu.cs.tweeter.server.service;
 import java.util.List;
 
 import edu.byu.cs.tweeter.model.domain.Status;
+import edu.byu.cs.tweeter.model.domain.User;
 import edu.byu.cs.tweeter.model.net.request.FeedRequest;
 import edu.byu.cs.tweeter.model.net.request.PostStatusRequest;
 import edu.byu.cs.tweeter.model.net.request.StoryRequest;
@@ -39,8 +40,11 @@ public class StatusService {
             return new PostStatusResponse("An error occurred while posting the status");
         }
 
-        // Finally, return a response indicating that the status was posted. The correct logic
-        // COME BACK TO THIS
+        // COME BACK TO THIS, DON'T KNOW HOW I'M GONNA UPDATE THE FEEDS CORRECTLY
+        List<String> followers = daoFactory.getFollowDAO().getFollowersAlias(request.getStatus().getUser().getAlias());
+        for (String follower : followers) {
+            daoFactory.getFeedDAO().updateFeed(follower, request);
+        }
 
         return new PostStatusResponse();
     }

@@ -1,6 +1,6 @@
 package edu.byu.cs.tweeter.client.presenter;
 
-import edu.byu.cs.tweeter.model.domain.AuthToken;
+import edu.byu.cs.tweeter.model.domain.Authtoken;
 import edu.byu.cs.tweeter.model.domain.User;
 
 public class FollowingPresenter extends PagedPresenter<User> {
@@ -10,7 +10,7 @@ public class FollowingPresenter extends PagedPresenter<User> {
     }
 
     @Override
-    protected void getItems(AuthToken authToken, User user, int pageSize, User lastItem, GetItemsObserver observer) {
+    protected void getItems(Authtoken authToken, User user, int pageSize, User lastItem, GetItemsObserver observer) {
         followService.loadMoreFollowees(authToken, user, pageSize, lastItem, observer);
     }
 

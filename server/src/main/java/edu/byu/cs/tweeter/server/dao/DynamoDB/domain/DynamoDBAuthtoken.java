@@ -1,40 +1,47 @@
-package edu.byu.cs.tweeter.model.domain;
-
-import java.io.Serializable;
+package edu.byu.cs.tweeter.server.dao.DynamoDB.domain;
 
 import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbBean;
 import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbPartitionKey;
 
-/**
- * Represents an auth token in the system.
- */
 @DynamoDbBean
-public class AuthToken implements Serializable {
+public class DynamoDBAuthtoken {
     /**
      * Value of the auth token.
      */
     public String token;
+
+    public String alias;
 
     /**
      * String representation of date/time at which the auth token was created.
      */
     public String datetime;
 
-    public AuthToken() {
+    public DynamoDBAuthtoken() {
     }
 
-    public AuthToken(String token) {
+    public DynamoDBAuthtoken(String token) {
         this.token = token;
     }
 
-    public AuthToken(String token, String datetime) {
+    public DynamoDBAuthtoken(String token, String datetime, String alias) {
         this.token = token;
         this.datetime = datetime;
+        this.alias = alias;
     }
+
 
     @DynamoDbPartitionKey
     public String getToken() {
         return token;
+    }
+
+    public String getAlias() {
+        return alias;
+    }
+
+    public void setAlias(String alias) {
+        this.alias = alias;
     }
 
     public void setToken(String token) {

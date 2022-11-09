@@ -1,12 +1,12 @@
 package edu.byu.cs.tweeter.model.net.response;
 
-import edu.byu.cs.tweeter.model.domain.AuthToken;
+import edu.byu.cs.tweeter.model.domain.Authtoken;
 import edu.byu.cs.tweeter.model.domain.User;
 
 public class RegisterResponse extends Response {
 
     private User user;
-    private AuthToken authToken;
+    private Authtoken authToken;
 
     /**
      * Creates a response indicating that the corresponding request was unsuccessful.
@@ -23,7 +23,7 @@ public class RegisterResponse extends Response {
      * @param user the now logged in user.
      * @param authToken the auth token representing this user's session with the server.
      */
-    public RegisterResponse(User user, AuthToken authToken) {
+    public RegisterResponse(User user, Authtoken authToken) {
         super(true, null);
         this.user = user;
         this.authToken = authToken;
@@ -43,7 +43,7 @@ public class RegisterResponse extends Response {
      *
      * @return the auth token.
      */
-    public AuthToken getAuthToken() {
+    public Authtoken getAuthToken() {
         return authToken;
     }
 }

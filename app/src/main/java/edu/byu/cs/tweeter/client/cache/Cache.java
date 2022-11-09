@@ -1,6 +1,6 @@
 package edu.byu.cs.tweeter.client.cache;
 
-import edu.byu.cs.tweeter.model.domain.AuthToken;
+import edu.byu.cs.tweeter.model.domain.Authtoken;
 import edu.byu.cs.tweeter.model.domain.User;
 
 /**
@@ -20,7 +20,7 @@ public class Cache {
     /**
      * The auth token for the current user session.
      */
-    private AuthToken currUserAuthToken;
+    private Authtoken currUserAuthToken;
 
     private Cache() {
         initialize();
@@ -43,11 +43,11 @@ public class Cache {
         this.currUser = currUser;
     }
 
-    public AuthToken getCurrUserAuthToken() {
+    public Authtoken getCurrUserAuthToken() {
         return currUserAuthToken;
     }
 
-    public void setCurrUserAuthToken(AuthToken currUserAuthToken) {
+    public void setCurrUserAuthToken(Authtoken currUserAuthToken) {
         this.currUserAuthToken = currUserAuthToken;
     }
 }

@@ -1,10 +1,10 @@
 package edu.byu.cs.tweeter.model.net.request;
 
-import edu.byu.cs.tweeter.model.domain.AuthToken;
+import edu.byu.cs.tweeter.model.domain.Authtoken;
 import edu.byu.cs.tweeter.model.domain.Status;
 
 public class FeedRequest {
-    private AuthToken authtoken;
+    private Authtoken authtoken;
     private Status lastStatus;
     private String alias;
     private int limit;
@@ -14,18 +14,18 @@ public class FeedRequest {
      */
     private FeedRequest() {}
 
-    public FeedRequest(AuthToken authtoken, Status lastStatus, String alias, int limit) {
+    public FeedRequest(Authtoken authtoken, Status lastStatus, String alias, int limit) {
         this.authtoken = authtoken;
         this.lastStatus = lastStatus;
         this.alias = alias;
         this.limit = limit;
     }
 
-    public AuthToken getAuthtoken() {
+    public Authtoken getAuthtoken() {
         return authtoken;
     }
 
-    public void setAuthtoken(AuthToken authtoken) {
+    public void setAuthtoken(Authtoken authtoken) {
         this.authtoken = authtoken;
     }
 

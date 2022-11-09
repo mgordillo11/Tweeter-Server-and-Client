@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 import java.io.IOException;
 
 import edu.byu.cs.tweeter.client.model.net.ServerFacade;
-import edu.byu.cs.tweeter.model.domain.AuthToken;
+import edu.byu.cs.tweeter.model.domain.Authtoken;
 import edu.byu.cs.tweeter.model.domain.User;
 import edu.byu.cs.tweeter.model.net.TweeterRemoteException;
 import edu.byu.cs.tweeter.model.net.request.FollowersRequest;
@@ -23,7 +23,7 @@ public class FollowServiceTest {
 
     @Test
     public void testGetFollowersSuccess() throws IOException, TweeterRemoteException {
-        FollowersRequest request = new FollowersRequest(new AuthToken("Temp"), "@Manny", 10, "@Dallin");
+        FollowersRequest request = new FollowersRequest(new Authtoken("Temp"), "@Manny", 10, "@Dallin");
         FollowersResponse response = getServerFacade().getFollowers(request, "/getfollowers");
 
         assertTrue(response.isSuccess());
@@ -34,7 +34,7 @@ public class FollowServiceTest {
 
     @Test
     public void testGetFollowingCount() throws IOException, TweeterRemoteException {
-        GetFollowersCountRequest request = new GetFollowersCountRequest(new AuthToken("Temp"),
+        GetFollowersCountRequest request = new GetFollowersCountRequest(new Authtoken("Temp"),
                 new User("Manny", "Manny", "@Manny", "https://faculty.cs.byu.edu/~jwilkerson/cs340/tweeter/images/donald_duck.png"));
         GetFollowersCountResponse response = getServerFacade().getFollowersCount(request, "/getfollowerscount");
 

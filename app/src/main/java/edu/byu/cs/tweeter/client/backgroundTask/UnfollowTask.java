@@ -6,7 +6,7 @@ import android.util.Log;
 
 import java.io.IOException;
 
-import edu.byu.cs.tweeter.model.domain.AuthToken;
+import edu.byu.cs.tweeter.model.domain.Authtoken;
 import edu.byu.cs.tweeter.model.domain.User;
 import edu.byu.cs.tweeter.model.net.TweeterRemoteException;
 import edu.byu.cs.tweeter.model.net.request.UnfollowRequest;
@@ -23,7 +23,7 @@ public class UnfollowTask extends AuthenticatedTask {
      */
     private User followee;
 
-    public UnfollowTask(AuthToken authToken, User followee, Handler messageHandler) {
+    public UnfollowTask(Authtoken authToken, User followee, Handler messageHandler) {
         super(messageHandler, authToken);
         this.followee = followee;
     }

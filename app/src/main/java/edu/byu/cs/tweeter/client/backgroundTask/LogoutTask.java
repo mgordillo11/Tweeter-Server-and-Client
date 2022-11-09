@@ -6,7 +6,7 @@ import android.util.Log;
 
 import java.io.IOException;
 
-import edu.byu.cs.tweeter.model.domain.AuthToken;
+import edu.byu.cs.tweeter.model.domain.Authtoken;
 import edu.byu.cs.tweeter.model.net.TweeterRemoteException;
 import edu.byu.cs.tweeter.model.net.request.LogoutRequest;
 import edu.byu.cs.tweeter.model.net.response.LogoutResponse;
@@ -17,7 +17,7 @@ import edu.byu.cs.tweeter.model.net.response.LogoutResponse;
 public class LogoutTask extends AuthenticatedTask {
     private static final String LOG_TAG = "LogoutTask";
 
-    public LogoutTask(AuthToken authToken, Handler messageHandler) {
+    public LogoutTask(Authtoken authToken, Handler messageHandler) {
         super(messageHandler, authToken);
     }
 

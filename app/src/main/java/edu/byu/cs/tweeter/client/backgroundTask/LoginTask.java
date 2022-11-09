@@ -5,7 +5,7 @@ import android.util.Log;
 
 import java.io.IOException;
 
-import edu.byu.cs.tweeter.model.domain.AuthToken;
+import edu.byu.cs.tweeter.model.domain.Authtoken;
 import edu.byu.cs.tweeter.model.domain.User;
 import edu.byu.cs.tweeter.model.net.TweeterRemoteException;
 import edu.byu.cs.tweeter.model.net.request.LoginRequest;
@@ -24,11 +24,7 @@ public class LoginTask extends AuthenticateTask {
     }
 
     @Override
-    protected Pair<User, AuthToken> runAuthenticationTask() {
-
-//        User loggedInUser = getFakeData().getFirstUser();
-//        AuthToken authToken = getFakeData().getAuthToken();
-
+    protected Pair<User, Authtoken> runAuthenticationTask() {
         try {
             LoginRequest request = new LoginRequest(username, password);
             LoginResponse response = getServerFacade().login(request, "/login");
@@ -43,7 +39,5 @@ public class LoginTask extends AuthenticateTask {
             Log.e(BackgroundTask.EXCEPTION_KEY, ex.getMessage(), ex);
             throw new RuntimeException("[Server Error] Unable to login user");
         }
-
-        //return new Pair<>(loggedInUser, authToken);
     }
 }

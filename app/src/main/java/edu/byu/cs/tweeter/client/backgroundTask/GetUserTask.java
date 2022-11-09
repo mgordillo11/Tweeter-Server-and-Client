@@ -6,7 +6,7 @@ import android.util.Log;
 
 import java.io.IOException;
 
-import edu.byu.cs.tweeter.model.domain.AuthToken;
+import edu.byu.cs.tweeter.model.domain.Authtoken;
 import edu.byu.cs.tweeter.model.domain.User;
 import edu.byu.cs.tweeter.model.net.TweeterRemoteException;
 import edu.byu.cs.tweeter.model.net.request.GetUserRequest;
@@ -26,14 +26,12 @@ public class GetUserTask extends AuthenticatedTask {
      */
     private final String alias;
 
-    public GetUserTask(AuthToken authToken, String alias, Handler messageHandler) {
+    public GetUserTask(Authtoken authToken, String alias, Handler messageHandler) {
         super(messageHandler, authToken);
         this.alias = alias;
     }
 
     private User getUser() {
-        //return getFakeData().findUserByAlias(alias);
-        
         try {
             GetUserRequest request = new GetUserRequest(authToken, alias);
             GetUserResponse response = getServerFacade().getUser(request, "/getuser");

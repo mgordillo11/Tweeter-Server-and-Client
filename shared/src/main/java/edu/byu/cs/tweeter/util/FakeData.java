@@ -7,7 +7,7 @@ import java.util.Collections;
 import java.util.GregorianCalendar;
 import java.util.List;
 
-import edu.byu.cs.tweeter.model.domain.AuthToken;
+import edu.byu.cs.tweeter.model.domain.Authtoken;
 import edu.byu.cs.tweeter.model.domain.Status;
 import edu.byu.cs.tweeter.model.domain.User;
 
@@ -52,7 +52,7 @@ public class FakeData {
     /**
      * Generated auth token.
      */
-    private final AuthToken authToken = new AuthToken();
+    private final Authtoken authToken = new Authtoken();
 
     /**
      * List of generated users.
@@ -145,7 +145,7 @@ public class FakeData {
         }
     }
 
-    public AuthToken getAuthToken() {
+    public Authtoken getAuthToken() {
         return authToken;
     }
 

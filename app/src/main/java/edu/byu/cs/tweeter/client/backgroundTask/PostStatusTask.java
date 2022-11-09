@@ -6,7 +6,7 @@ import android.util.Log;
 
 import java.io.IOException;
 
-import edu.byu.cs.tweeter.model.domain.AuthToken;
+import edu.byu.cs.tweeter.model.domain.Authtoken;
 import edu.byu.cs.tweeter.model.domain.Status;
 import edu.byu.cs.tweeter.model.net.TweeterRemoteException;
 import edu.byu.cs.tweeter.model.net.request.PostStatusRequest;
@@ -24,7 +24,7 @@ public class PostStatusTask extends AuthenticatedTask {
      */
     private Status status;
 
-    public PostStatusTask(AuthToken authToken, Status status, Handler messageHandler) {
+    public PostStatusTask(Authtoken authToken, Status status, Handler messageHandler) {
         super(messageHandler, authToken);
         this.status = status;
     }
@@ -35,6 +35,7 @@ public class PostStatusTask extends AuthenticatedTask {
             PostStatusRequest request = new PostStatusRequest(authToken, status);
             PostStatusResponse response = getServerFacade().postStatus(request, "/poststatus");
 
+            // It simple needs to send a success message but our background task does that
             if (response.isSuccess()) {
 
             } else {
@@ -46,8 +47,6 @@ public class PostStatusTask extends AuthenticatedTask {
             Log.e(BackgroundTask.EXCEPTION_KEY, ex.getMessage(), ex);
             throw new RuntimeException("[ServerError500Exception] Unable to post status");
         }
-
-        // It simple needs to send a success message but our background task does that
     }
 
     @Override

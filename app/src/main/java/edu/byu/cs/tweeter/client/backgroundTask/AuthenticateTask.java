@@ -4,7 +4,7 @@ import android.os.Bundle;
 import android.os.Handler;
 
 import edu.byu.cs.tweeter.client.model.net.ServerFacade;
-import edu.byu.cs.tweeter.model.domain.AuthToken;
+import edu.byu.cs.tweeter.model.domain.Authtoken;
 import edu.byu.cs.tweeter.model.domain.User;
 import edu.byu.cs.tweeter.util.Pair;
 
@@ -13,7 +13,7 @@ public abstract class AuthenticateTask extends BackgroundTask {
     public static final String AUTH_TOKEN_KEY = "auth-token";
 
     private User authenticatedUser;
-    private AuthToken authToken;
+    private Authtoken authToken;
 
     protected ServerFacade serverFacade;
 
@@ -35,13 +35,13 @@ public abstract class AuthenticateTask extends BackgroundTask {
 
     @Override
     protected void processTask() {
-        Pair<User, AuthToken> loginResult = runAuthenticationTask();
+        Pair<User, Authtoken> loginResult = runAuthenticationTask();
 
         authenticatedUser = loginResult.getFirst();
         authToken = loginResult.getSecond();
     }
 
-    protected abstract Pair<User, AuthToken> runAuthenticationTask();
+    protected abstract Pair<User, Authtoken> runAuthenticationTask();
 
     @Override
     protected void loadSuccessBundle(Bundle msgBundle) {

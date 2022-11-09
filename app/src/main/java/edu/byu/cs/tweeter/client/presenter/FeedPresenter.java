@@ -1,6 +1,6 @@
 package edu.byu.cs.tweeter.client.presenter;
 
-import edu.byu.cs.tweeter.model.domain.AuthToken;
+import edu.byu.cs.tweeter.model.domain.Authtoken;
 import edu.byu.cs.tweeter.model.domain.Status;
 import edu.byu.cs.tweeter.model.domain.User;
 
@@ -11,7 +11,7 @@ public class FeedPresenter extends PagedPresenter<Status> {
     }
 
     @Override
-    protected void getItems(AuthToken authToken, User user, int pageSize, Status lastItem, PagedPresenter<Status>.GetItemsObserver getItemsObserver) {
+    protected void getItems(Authtoken authToken, User user, int pageSize, Status lastItem, PagedPresenter<Status>.GetItemsObserver getItemsObserver) {
         statusService.loadMoreFeed(authToken, user, pageSize, lastItem, getItemsObserver);
     }
 

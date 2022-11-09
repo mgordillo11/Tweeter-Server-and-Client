@@ -5,7 +5,7 @@ import java.util.List;
 import edu.byu.cs.tweeter.client.backgroundTask.observer.GetUserObserver;
 import edu.byu.cs.tweeter.client.backgroundTask.observer.PageNotificationObserver;
 import edu.byu.cs.tweeter.client.cache.Cache;
-import edu.byu.cs.tweeter.model.domain.AuthToken;
+import edu.byu.cs.tweeter.model.domain.Authtoken;
 import edu.byu.cs.tweeter.model.domain.User;
 
 public abstract class PagedPresenter<T> extends Presenter {
@@ -53,7 +53,7 @@ public abstract class PagedPresenter<T> extends Presenter {
         this.hasMorePages = hasMorePages;
     }
 
-    protected abstract void getItems(AuthToken authToken, User user, int pageSize, T lastItem, GetItemsObserver getItemsObserver);
+    protected abstract void getItems(Authtoken authToken, User user, int pageSize, T lastItem, GetItemsObserver getItemsObserver);
 
     protected abstract String getDescription(boolean errorOrException);
 

@@ -5,7 +5,7 @@ import android.util.Log;
 
 import java.io.IOException;
 
-import edu.byu.cs.tweeter.model.domain.AuthToken;
+import edu.byu.cs.tweeter.model.domain.Authtoken;
 import edu.byu.cs.tweeter.model.domain.User;
 import edu.byu.cs.tweeter.model.net.TweeterRemoteException;
 import edu.byu.cs.tweeter.model.net.request.RegisterRequest;
@@ -41,11 +41,7 @@ public class RegisterTask extends AuthenticateTask {
     }
 
     @Override
-    protected Pair<User, AuthToken> runAuthenticationTask() {
-//        User registeredUser = getFakeData().getFirstUser();
-//        AuthToken authToken = getFakeData().getAuthToken();
-//        return new Pair<>(registeredUser, authToken);
-
+    protected Pair<User, Authtoken> runAuthenticationTask() {
         try {
             RegisterRequest request = new RegisterRequest(firstName, lastName, username, password, image);
             RegisterResponse response = getServerFacade().register(request, "/register");
