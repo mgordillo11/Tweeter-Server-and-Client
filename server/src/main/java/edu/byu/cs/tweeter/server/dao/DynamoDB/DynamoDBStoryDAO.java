@@ -25,7 +25,6 @@ public class DynamoDBStoryDAO extends DynamoDBMainDAO implements IStoryDAO {
     private final DynamoDbTable<DynamoDBStatus> table = enhancedClient.table(TABLE_NAME, TableSchema.fromBean(DynamoDBStatus.class));
 
     private final DynamoDBUserDAO userDAO = new DynamoDBUserDAO();
-    //private static Long lastTimestamp = null;
 
     private static final String aliasAttr = "sender_alias";
     private static final String datetimeAttr = "datetime";
@@ -33,7 +32,6 @@ public class DynamoDBStoryDAO extends DynamoDBMainDAO implements IStoryDAO {
     @Override
     public StoryResponse getStory(StoryRequest request) {
         int limit = request.getLimit();
-        //Long currentTime = new Timestamp(System.currentTimeMillis()).getTime();
 
         Key key = Key.builder()
                 .partitionValue(request.getAlias())
@@ -68,8 +66,6 @@ public class DynamoDBStoryDAO extends DynamoDBMainDAO implements IStoryDAO {
             return new StoryResponse(new ArrayList<>(), false);
         }
 
-        //lastTimestamp = results.get(results.size() - 1).getDate();
-
         return new StoryResponse(dynamoStatusesToStatuses(results), true);
     }
 
@@ -78,10 +74,12 @@ public class DynamoDBStoryDAO extends DynamoDBMainDAO implements IStoryDAO {
         Long datetime = Timestamp.valueOf(status.getDate()).getTime();
 
         try {
-            DynamoDBStatus dynamoDBStatus = new DynamoDBStatus(status.getPost(), status.getUser().getAlias(), datetime, status.getUrls(), status.getMentions());
+            DynamoDBStatus dynamoDBStatus = new DynamoDBStatus(status.getPost(),
+                    status.getUser().getAlias(), datetime, status.getUrls(), status.getMentions());
             table.putItem(dynamoDBStatus);
             return true;
         } catch (Exception e) {
+            System.err.println("Post did not work");
             e.printStackTrace();
             return false;
         }
@@ -93,16 +91,12 @@ public class DynamoDBStoryDAO extends DynamoDBMainDAO implements IStoryDAO {
         // Don't know if this is the proper way to convert back time to string
         for (DynamoDBStatus currentStatus : dynamoStatuses) {
             User user = userDAO.getUser(currentStatus.getSender_alias());
-            String statusTime = new Timestamp(currentStatus.getDate()).toString();
+            String statusTime = new Timestamp(currentStatus.getDatetime()).toString();
 
             Status status = new Status(currentStatus.getPost(), user, statusTime, currentStatus.getUrls(), currentStatus.getMentions());
             statuses.add(status);
         }
 
         return statuses;
-    }
-
-    private boolean isNonEmptyLong(Long value) {
-        return (value != null) && (value > 0);
     }
 }

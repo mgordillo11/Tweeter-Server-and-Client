@@ -41,42 +41,42 @@ public class DynamoDBStatus {
         this.mentions = mentions;
     }
 
-    @DynamoDbPartitionKey
-    public String getSender_alias() {
-        return sender_alias;
-    }
-
-    @DynamoDbSortKey
-    public Long getDate() {
-        return datetime;
-    }
-
     public String getPost() {
         return post;
-    }
-
-    public List<String> getUrls() {
-        return urls;
-    }
-
-    public List<String> getMentions() {
-        return mentions;
     }
 
     public void setPost(String post) {
         this.post = post;
     }
 
+    @DynamoDbPartitionKey
+    public String getSender_alias() {
+        return sender_alias;
+    }
+
     public void setSender_alias(String sender_alias) {
         this.sender_alias = sender_alias;
+    }
+
+    @DynamoDbSortKey
+    public Long getDatetime() {
+        return datetime;
     }
 
     public void setDatetime(Long datetime) {
         this.datetime = datetime;
     }
 
+    public List<String> getUrls() {
+        return urls;
+    }
+
     public void setUrls(List<String> urls) {
         this.urls = urls;
+    }
+
+    public List<String> getMentions() {
+        return mentions;
     }
 
     public void setMentions(List<String> mentions) {

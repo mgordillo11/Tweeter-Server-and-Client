@@ -7,7 +7,7 @@ import edu.byu.cs.tweeter.server.dao.DAOInterfaces.IFollowDAO;
 import edu.byu.cs.tweeter.server.dao.DAOInterfaces.IImageDAO;
 import edu.byu.cs.tweeter.server.dao.DAOInterfaces.IStoryDAO;
 import edu.byu.cs.tweeter.server.dao.DAOInterfaces.IUserDAO;
-import edu.byu.cs.tweeter.server.dao.S3.S3DAO;
+import edu.byu.cs.tweeter.server.dao.DynamoDB.S3.S3DAO;
 
 public class DynamoDBFactory implements DAOFactory {
     @Override

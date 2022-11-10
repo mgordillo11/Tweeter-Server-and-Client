@@ -4,7 +4,6 @@ import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
 
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 
 import edu.byu.cs.tweeter.model.domain.Authtoken;
 import edu.byu.cs.tweeter.model.domain.User;

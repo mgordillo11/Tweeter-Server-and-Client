@@ -10,7 +10,8 @@ public class PostStatusRequest {
     /**
      * Allows construction of the object from Json. Private so it won't be called in normal code.
      */
-    private PostStatusRequest() {}
+    private PostStatusRequest() {
+    }
 
     public PostStatusRequest(Authtoken authToken, Status status) {
         this.authToken = authToken;
@@ -23,5 +24,13 @@ public class PostStatusRequest {
 
     public Status getStatus() {
         return status;
+    }
+
+    public void setAuthToken(Authtoken authToken) {
+        this.authToken = authToken;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
     }
 }

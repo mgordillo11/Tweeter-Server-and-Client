@@ -1,4 +1,4 @@
-package edu.byu.cs.tweeter.server.dao.S3;
+package edu.byu.cs.tweeter.server.dao.DynamoDB.S3;
 
 import com.amazonaws.regions.Regions;
 import com.amazonaws.services.s3.AmazonS3;

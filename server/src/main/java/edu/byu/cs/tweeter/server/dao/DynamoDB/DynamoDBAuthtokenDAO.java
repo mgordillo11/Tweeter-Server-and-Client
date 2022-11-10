@@ -1,13 +1,7 @@
 package edu.byu.cs.tweeter.server.dao.DynamoDB;
 
-import java.sql.Timestamp;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.Period;
-import java.time.format.DateTimeFormatter;
-import java.util.Date;
 import java.util.UUID;
 
 import edu.byu.cs.tweeter.model.domain.Authtoken;
@@ -27,10 +21,7 @@ public class DynamoDBAuthtokenDAO extends DynamoDBMainDAO implements IAuthtokenD
         LocalDate localDate = LocalDate.now();
         String timeStamp = localDate.toString();
 
-        System.err.println("timeStamp: " + timeStamp);
-
         String token = UUID.randomUUID().toString();
-
         DynamoDBAuthtoken dynamoDBAuthtoken = new DynamoDBAuthtoken(token, timeStamp, username);
 
         try {
@@ -62,10 +53,6 @@ public class DynamoDBAuthtokenDAO extends DynamoDBMainDAO implements IAuthtokenD
         try {
             DynamoDBAuthtoken token = getAuthToken(authToken);
 
-            // Validate if authToken is active (24 hours or less old)
-//            Period period = Period.between(Timestamp.valueOf(token.getDatetime()).toLocalDateTime().toLocalDate()
-//                    , new Timestamp(System.currentTimeMillis()).toLocalDateTime().toLocalDate());
-
             LocalDate start_date = LocalDate.now();
             LocalDate end_date = LocalDate.parse(token.getTimeStamp());
 
@@ -89,18 +76,6 @@ public class DynamoDBAuthtokenDAO extends DynamoDBMainDAO implements IAuthtokenD
         return getAuthToken(authtoken).getAlias();
     }
 
-    private int timeBetweenHours(Date date1, Date date2) {
-        int diff = (int) (date2.getTime() - date1.getTime());
-        return (diff / (1000 * 60 * 60)) % 24;
-    }
-
-    private Long getHoursBetweenDates(String datetime) {
-        Long currentTime = new Timestamp(System.currentTimeMillis()).getTime();
-        Long tokenTime = Timestamp.valueOf(datetime).getTime();
-
-        return (currentTime - tokenTime) / 1000 / 60 / 60;
-    }
-
     public DynamoDBAuthtoken getAuthToken(Authtoken authToken) {
         System.err.println(authToken.getToken());
 
@@ -108,9 +83,6 @@ public class DynamoDBAuthtokenDAO extends DynamoDBMainDAO implements IAuthtokenD
         Key key = Key.builder().partitionValue(token).build();
 
         return table.getItem(key);
-
-//        return table.getItem(
-//                (GetItemEnhancedRequest.Builder requestBuilder) -> requestBuilder.key(key));
     }
 
     public Authtoken dynamoAuthToAuth(DynamoDBAuthtoken dynamoAuth) {

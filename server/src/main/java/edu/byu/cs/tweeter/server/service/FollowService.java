@@ -1,7 +1,6 @@
 package edu.byu.cs.tweeter.server.service;
 
 import java.util.List;
-import java.util.Random;
 
 import edu.byu.cs.tweeter.model.domain.User;
 import edu.byu.cs.tweeter.model.net.request.FollowRequest;
@@ -20,14 +19,13 @@ import edu.byu.cs.tweeter.model.net.response.IsFollowerResponse;
 import edu.byu.cs.tweeter.model.net.response.UnfollowResponse;
 import edu.byu.cs.tweeter.server.dao.DAOFactory;
 import edu.byu.cs.tweeter.server.dao.DynamoDB.FollowDAO;
-import edu.byu.cs.tweeter.util.FakeData;
 import edu.byu.cs.tweeter.util.Pair;
 
 /**
  * Contains the business logic for getting the users a user is following.
  */
 public class FollowService {
-    private DAOFactory daoFactory;
+    private final DAOFactory daoFactory;
 
     public FollowService(DAOFactory daoFactory) {
         this.daoFactory = daoFactory;
@@ -52,7 +50,7 @@ public class FollowService {
         }
 
         boolean validAuthtoken = daoFactory.getAuthtokenDAO().isValidAuthToken(request.getAuthtoken());
-        if(!validAuthtoken) {
+        if (!validAuthtoken) {
             return new FollowingResponse("Authtoken is invalid, and User is no longer active");
         }
 
@@ -66,12 +64,12 @@ public class FollowService {
             throw new RuntimeException("[Bad Request] Request needs to have a follower alias");
         } else if (request.getLimit() <= 0) {
             throw new RuntimeException("[Bad Request] Request needs to have a positive limit");
-        } else if(request.getAuthtoken() == null) {
+        } else if (request.getAuthtoken() == null) {
             throw new RuntimeException("[Bad Request] Request needs to have an auth token");
         }
 
         boolean validAuthtoken = daoFactory.getAuthtokenDAO().isValidAuthToken(request.getAuthtoken());
-        if(!validAuthtoken) {
+        if (!validAuthtoken) {
             return new FollowersResponse("Authtoken is invalid, and User is no longer active");
         }
 
@@ -87,11 +85,15 @@ public class FollowService {
         }
 
         boolean validAuthtoken = daoFactory.getAuthtokenDAO().isValidAuthToken(request.getAuthtoken());
-        if(!validAuthtoken) {
+        if (!validAuthtoken) {
             return new UnfollowResponse("Authtoken is invalid, and User is no longer active");
         }
 
-        return new UnfollowResponse();
+
+        String currentUserAlias = daoFactory.getAuthtokenDAO().getAliasFromAuthToken(request.getAuthtoken());
+        String userToFollowAlias = request.getUser().getAlias();
+
+        return daoFactory.getFollowDAO().unfollow(currentUserAlias, userToFollowAlias);
     }
 
     public FollowResponse follow(FollowRequest request) {
@@ -102,7 +104,7 @@ public class FollowService {
         }
 
         boolean validAuthtoken = daoFactory.getAuthtokenDAO().isValidAuthToken(request.getAuthtoken());
-        if(!validAuthtoken) {
+        if (!validAuthtoken) {
             return new FollowResponse("Authtoken is invalid, and User is no longer active");
         }
 
@@ -122,7 +124,7 @@ public class FollowService {
         }
 
         boolean validAuthtoken = daoFactory.getAuthtokenDAO().isValidAuthToken(request.getAuthtoken());
-        if(!validAuthtoken) {
+        if (!validAuthtoken) {
             return new IsFollowerResponse("Authtoken is invalid, and User is no longer active");
         }
 
@@ -137,7 +139,7 @@ public class FollowService {
         }
 
         boolean validAuthtoken = daoFactory.getAuthtokenDAO().isValidAuthToken(request.getAuthtoken());
-        if(!validAuthtoken) {
+        if (!validAuthtoken) {
             return new GetFollowingCountResponse("Authtoken is invalid, and User is no longer active");
         }
 
@@ -153,7 +155,7 @@ public class FollowService {
         }
 
         boolean validAuthtoken = daoFactory.getAuthtokenDAO().isValidAuthToken(request.getAuthtoken());
-        if(!validAuthtoken) {
+        if (!validAuthtoken) {
             return new GetFollowersCountResponse("Authtoken is invalid, and User is no longer active");
         }
 
