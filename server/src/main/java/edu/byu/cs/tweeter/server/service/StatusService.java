@@ -25,7 +25,7 @@ public class StatusService {
         if (request.getStatus() == null) {
             throw new RuntimeException("[Bad Request] Status is null");
         } else if (request.getAuthToken() == null) {
-            throw new RuntimeException("[Ba Request] AuthToken is null");
+            throw new RuntimeException("[Bad Request] AuthToken is null");
         } else if (request.getStatus().post == null) {
             throw new RuntimeException("[Bad Request] Status text is null");
         }

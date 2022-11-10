@@ -40,12 +40,12 @@ public class PostStatusTask extends AuthenticatedTask {
 
             } else {
                 Log.e(BackgroundTask.MESSAGE_KEY, response.getMessage());
-                throw new RuntimeException("[BadRequest400Exception] Unable to post status");
+                throw new RuntimeException("[Bad Request] Unable to post status");
             }
         } catch (IOException | TweeterRemoteException ex) {
             ex.printStackTrace();
             Log.e(BackgroundTask.EXCEPTION_KEY, ex.getMessage(), ex);
-            throw new RuntimeException("[ServerError500Exception] Unable to post status");
+            throw new RuntimeException("[Server Error] Unable to post status");
         }
     }
 

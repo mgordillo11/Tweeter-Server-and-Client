@@ -30,7 +30,7 @@ public class GetStoryTask extends PagedTask<Status> {
         try {
             String lastStatusAlias = lastItem == null ? null : lastItem.getUser().getAlias();
 
-            StoryRequest request = new StoryRequest(authToken, lastStatusAlias, getLimit(), getLastItem());
+            StoryRequest request = new StoryRequest(authToken, getTargetUser().getAlias(), getLimit(), getLastItem());
             StoryResponse response = getServerFacade().getStory(request, "/getstory");
 
             if (response.isSuccess()) {

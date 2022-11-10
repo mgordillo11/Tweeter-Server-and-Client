@@ -45,6 +45,8 @@ public class DynamoDBFeedDAO extends DynamoDBMainDAO implements IFeedDAO {
                 .queryConditional(QueryConditional.keyEqualTo(key))
                 .scanIndexForward(false);
 
+        System.err.println("request.getLastStatus() = " + request.getLastStatus());
+
         if (request.getLastStatus() != null) {
             // convert timestamp to long
             String timestamp = request.getLastStatus().getDate();
@@ -59,17 +61,22 @@ public class DynamoDBFeedDAO extends DynamoDBMainDAO implements IFeedDAO {
         }
 
         QueryEnhancedRequest queryRequest = requestBuilder.build();
+        List<DynamoDBFeed> results = new ArrayList<>();
 
-        List<DynamoDBFeed> results = table.query(queryRequest)
-                .items()
-                .stream()
-                .limit(limit)
-                .collect(Collectors.toList());
-
-        if (results.size() == 0) {
-            return new FeedResponse("No more statuses to load");
+        try {
+            results = table.query(queryRequest)
+                    .items()
+                    .stream()
+                    .limit(limit)
+                    .collect(Collectors.toList());
+        } catch (Exception e) {
+            System.err.println("Error in DynamoDBFeedDAO.getFeed: " + e.getMessage());
+            e.printStackTrace();
         }
 
+        if (results.size() == 0) {
+            return new FeedResponse(new ArrayList<>(), false);
+        }
 
         List<DynamoDBStatus> dynamoDBStatuses = new ArrayList<>();
         for (DynamoDBFeed feed : results) {
@@ -77,6 +84,7 @@ public class DynamoDBFeedDAO extends DynamoDBMainDAO implements IFeedDAO {
         }
 
         List<Status> statuses = storyDAO.dynamoStatusesToStatuses(dynamoDBStatuses);
+        System.err.println("statuses.size() = " + statuses.size());
 
         //lastTimestamp = results.get(results.size() - 1).getDatetime();
 
