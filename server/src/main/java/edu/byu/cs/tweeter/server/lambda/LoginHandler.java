@@ -17,5 +17,6 @@ public class LoginHandler implements RequestHandler<LoginRequest, LoginResponse>
     public LoginResponse handleRequest(LoginRequest loginRequest, Context context) {
         UserService userService = new UserService(new DynamoDBFactory());
         return userService.login(loginRequest);
+
     }
 }

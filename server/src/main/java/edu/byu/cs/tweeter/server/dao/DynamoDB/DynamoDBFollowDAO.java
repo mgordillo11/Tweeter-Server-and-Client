@@ -44,8 +44,8 @@ public class DynamoDBFollowDAO extends DynamoDBMainDAO implements IFollowDAO {
     private final DynamoDbIndex<DynamoDBFollows> followsIndex
             = followsTable.index(indexName);
 
-    private static String lastFollowee = null;
-    private static String lastFollower = null;
+    //private static String lastFollowee = null;
+    //private static String lastFollower = null;
 
     @Override
     public Pair<List<User>, Boolean> getFollowees(FollowingRequest request) {
@@ -56,7 +56,7 @@ public class DynamoDBFollowDAO extends DynamoDBMainDAO implements IFollowDAO {
             return new Pair<>(new ArrayList<>() , false);
         }
 
-        lastFollowee = followees.get(followees.size() - 1).getFollowee_handle();
+        //lastFollowee = followees.get(followees.size() - 1).getFollowee_handle();
         List<User> followeesUsers = followsToUsers(followees);
 
         return new Pair<>(followeesUsers, true);
@@ -71,7 +71,7 @@ public class DynamoDBFollowDAO extends DynamoDBMainDAO implements IFollowDAO {
             return new Pair<>(new ArrayList<>() , false);
         }
 
-        lastFollower = followers.get(followers.size() - 1).getFollower_handle();
+        //lastFollower = followers.get(followers.size() - 1).getFollower_handle();
         List<User> followersUsers = followsToUsers(followers);
 
         return new Pair<>(followersUsers, true);
@@ -199,7 +199,7 @@ public class DynamoDBFollowDAO extends DynamoDBMainDAO implements IFollowDAO {
                 .limit(limit)
                 .scanIndexForward(false);
 
-        if (isNonEmptyString(lastFollower)) {
+        if (isNonEmptyString(request.getLastFollowerAlias())) {
             Map<String, AttributeValue> startKey = new HashMap<>();
 
             startKey.put(followerAttr, AttributeValue.builder().s(lastFollower).build());
@@ -234,7 +234,7 @@ public class DynamoDBFollowDAO extends DynamoDBMainDAO implements IFollowDAO {
                 .queryConditional(QueryConditional.keyEqualTo(key))
                 .scanIndexForward(true);
 
-        if (isNonEmptyString(lastFollowee)) {
+        if (isNonEmptyString(request.getLastFolloweeAlias())) {
             Map<String, AttributeValue> startKey = new HashMap<>();
 
             startKey.put(followerAttr, AttributeValue.builder().s(request.getFollowerAlias()).build());

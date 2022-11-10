@@ -16,7 +16,7 @@ public class DynamoDBStatus {
     /**
      * User who sent the status.
      */
-    public String userAlias;
+    public String sender_alias;
     /**
      * String representation of the date/time at which the status was sent.
      */
@@ -33,21 +33,17 @@ public class DynamoDBStatus {
     public DynamoDBStatus() {
     }
 
-    public DynamoDBStatus(String post, String userAlias, Long datetime, List<String> urls, List<String> mentions) {
+    public DynamoDBStatus(String post, String sender_alias, Long datetime, List<String> urls, List<String> mentions) {
         this.post = post;
-        this.userAlias = userAlias;
+        this.sender_alias = sender_alias;
         this.datetime = datetime;
         this.urls = urls;
         this.mentions = mentions;
     }
 
     @DynamoDbPartitionKey
-    public String getUserAlias() {
-        return userAlias;
-    }
-
-    public void setUserAlias(String userAlias) {
-        this.userAlias = userAlias;
+    public String getSender_alias() {
+        return sender_alias;
     }
 
     @DynamoDbSortKey
@@ -67,13 +63,33 @@ public class DynamoDBStatus {
         return mentions;
     }
 
+    public void setPost(String post) {
+        this.post = post;
+    }
+
+    public void setSender_alias(String sender_alias) {
+        this.sender_alias = sender_alias;
+    }
+
+    public void setDatetime(Long datetime) {
+        this.datetime = datetime;
+    }
+
+    public void setUrls(List<String> urls) {
+        this.urls = urls;
+    }
+
+    public void setMentions(List<String> mentions) {
+        this.mentions = mentions;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         DynamoDBStatus status = (DynamoDBStatus) o;
         return Objects.equals(post, status.post) &&
-                Objects.equals(userAlias, status.userAlias) &&
+                Objects.equals(sender_alias, status.sender_alias) &&
                 Objects.equals(datetime, status.datetime) &&
                 Objects.equals(mentions, status.mentions) &&
                 Objects.equals(urls, status.urls);
@@ -81,14 +97,14 @@ public class DynamoDBStatus {
 
     @Override
     public int hashCode() {
-        return Objects.hash(post, userAlias, datetime, mentions, urls);
+        return Objects.hash(post, sender_alias, datetime, mentions, urls);
     }
 
     @Override
     public String toString() {
         return "Status{" +
                 "post='" + post + '\'' +
-                ", user=" + userAlias +
+                ", user=" + sender_alias +
                 ", datetime=" + datetime +
                 ", mentions=" + mentions +
                 ", urls=" + urls +

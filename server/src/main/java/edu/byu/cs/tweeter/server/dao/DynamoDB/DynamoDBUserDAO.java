@@ -8,7 +8,6 @@ import software.amazon.awssdk.enhanced.dynamodb.Key;
 import software.amazon.awssdk.enhanced.dynamodb.TableSchema;
 import software.amazon.awssdk.enhanced.dynamodb.model.GetItemEnhancedRequest;
 
-
 public class DynamoDBUserDAO extends DynamoDBMainDAO implements IUserDAO {
     private static final String TABLE_NAME = "users";
     private final DynamoDbTable<DynamoDBUser> table = enhancedClient.table(TABLE_NAME, TableSchema.fromBean(DynamoDBUser.class));
@@ -27,7 +26,6 @@ public class DynamoDBUserDAO extends DynamoDBMainDAO implements IUserDAO {
     @Override
     public void register(String username, String password, String firstName, String lastName, String imageURL) {
         DynamoDBUser user = new DynamoDBUser(firstName, lastName, username, password, imageURL);
-
         try {
             table.putItem(user);
         } catch (Exception e) {
@@ -39,6 +37,10 @@ public class DynamoDBUserDAO extends DynamoDBMainDAO implements IUserDAO {
     @Override
     public User getUser(String username) {
         DynamoDBUser user = getCompleteUser(username);
+        if (user == null) {
+            return null;
+        }
+
         return new User(user.getFirstName(), user.getLastName(), user.getAlias(), user.getImageUrl());
     }
 

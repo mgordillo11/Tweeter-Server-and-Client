@@ -13,10 +13,7 @@ public class DynamoDBUser implements Comparable<DynamoDBUser> {
     private String password;
     private String imageUrl;
 
-    /**
-     * Allows construction of the object from Json. Private so it won't be called by other code.
-     */
-    private DynamoDBUser() {
+    public DynamoDBUser() {
     }
 
     public DynamoDBUser(String firstName, String lastName, String password, String imageURL) {

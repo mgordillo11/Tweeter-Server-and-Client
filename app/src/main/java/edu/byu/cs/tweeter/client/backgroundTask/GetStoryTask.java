@@ -27,12 +27,10 @@ public class GetStoryTask extends PagedTask<Status> {
 
     @Override
     protected Pair<List<Status>, Boolean> getItems() {
-        if (getLastItem() == null) {
-            lastItem = getFakeData().getFakeStatuses().get(0);
-        }
-
         try {
-            StoryRequest request = new StoryRequest(authToken, getTargetUser().getAlias(), getLimit(), getLastItem());
+            String lastStatusAlias = lastItem == null ? null : lastItem.getUser().getAlias();
+
+            StoryRequest request = new StoryRequest(authToken, lastStatusAlias, getLimit(), getLastItem());
             StoryResponse response = getServerFacade().getStory(request, "/getstory");
 
             if (response.isSuccess()) {

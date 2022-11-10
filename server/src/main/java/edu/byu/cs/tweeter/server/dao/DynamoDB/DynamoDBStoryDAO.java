@@ -25,28 +25,33 @@ public class DynamoDBStoryDAO extends DynamoDBMainDAO implements IStoryDAO {
     private final DynamoDbTable<DynamoDBStatus> table = enhancedClient.table(TABLE_NAME, TableSchema.fromBean(DynamoDBStatus.class));
 
     private final DynamoDBUserDAO userDAO = new DynamoDBUserDAO();
+    //private static Long lastTimestamp = null;
 
-    private static Long lastTimestamp = null;
+    private static final String aliasAttr = "sender_alias";
+    private static final String datetimeAttr = "datetime";
 
     @Override
     public StoryResponse getStory(StoryRequest request) {
         int limit = request.getLimit();
-        Long currentTime = new Timestamp(System.currentTimeMillis()).getTime();
+        //Long currentTime = new Timestamp(System.currentTimeMillis()).getTime();
 
         Key key = Key.builder()
                 .partitionValue(request.getAlias())
-                .sortValue(currentTime)
                 .build();
 
         QueryEnhancedRequest.Builder requestBuilder = QueryEnhancedRequest.builder()
                 .queryConditional(QueryConditional.keyEqualTo(key))
                 .scanIndexForward(false);
 
-        if (isNonEmptyLong(lastTimestamp)) {
+        if (request.getLastStatus() != null) {
+            // convert timestamp to long
+            String timestamp = request.getLastStatus().getDate();
+            long convertedTime = Timestamp.valueOf(timestamp).getTime();
+
             Map<String, AttributeValue> startKey = new HashMap<>();
 
-            startKey.put("alias", AttributeValue.builder().s(request.getAlias()).build());
-            startKey.put("datetime", AttributeValue.builder().n(lastTimestamp.toString()).build());
+            startKey.put(aliasAttr, AttributeValue.builder().s(request.getAlias()).build());
+            startKey.put(datetimeAttr, AttributeValue.builder().n(Long.toString(convertedTime)).build());
 
             requestBuilder.exclusiveStartKey(startKey);
         }
@@ -63,7 +68,7 @@ public class DynamoDBStoryDAO extends DynamoDBMainDAO implements IStoryDAO {
             return new StoryResponse(new ArrayList<>(), false);
         }
 
-        lastTimestamp = results.get(results.size() - 1).getDate();
+        //lastTimestamp = results.get(results.size() - 1).getDate();
 
         return new StoryResponse(dynamoStatusesToStatuses(results), true);
     }
@@ -82,12 +87,12 @@ public class DynamoDBStoryDAO extends DynamoDBMainDAO implements IStoryDAO {
         }
     }
 
-    private List<Status> dynamoStatusesToStatuses(List<DynamoDBStatus> dynamoStatuses) {
+    public List<Status> dynamoStatusesToStatuses(List<DynamoDBStatus> dynamoStatuses) {
         List<Status> statuses = new ArrayList<>();
 
         // Don't know if this is the proper way to convert back time to string
         for (DynamoDBStatus currentStatus : dynamoStatuses) {
-            User user = userDAO.getUser(currentStatus.getUserAlias());
+            User user = userDAO.getUser(currentStatus.getSender_alias());
             String statusTime = new Timestamp(currentStatus.getDate()).toString();
 
             Status status = new Status(currentStatus.getPost(), user, statusTime, currentStatus.getUrls(), currentStatus.getMentions());

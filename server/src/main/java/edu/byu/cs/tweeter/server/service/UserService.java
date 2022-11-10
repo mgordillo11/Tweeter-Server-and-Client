@@ -1,5 +1,9 @@
 package edu.byu.cs.tweeter.server.service;
 
+import org.apache.commons.logging.Log;
+
+import java.text.ParseException;
+
 import edu.byu.cs.tweeter.model.domain.Authtoken;
 import edu.byu.cs.tweeter.model.domain.User;
 import edu.byu.cs.tweeter.model.net.request.GetUserRequest;
@@ -22,7 +26,7 @@ public class UserService {
         this.hashing = new PBKDF2WithHmacSHA1Hashing();
     }
 
-    public LoginResponse login(LoginRequest request) {
+    public LoginResponse login(LoginRequest request)  {
         if (request.getUsername() == null) {
             throw new RuntimeException("[Bad Request] Missing a username");
         } else if (request.getPassword() == null) {
@@ -32,6 +36,7 @@ public class UserService {
         // check if user does not exist
         boolean userExists = daoFactory.getUserDAO().getUser(request.getUsername()) != null;
         if (!userExists) {
+            //throw new RuntimeException("[Unauthorized] User does not exist");
             return new LoginResponse("User does not exist, based on the provided username");
         }
 
@@ -87,22 +92,48 @@ public class UserService {
         }
 
         // upload image to S3, and get the URL
-        String imageURL = daoFactory.getImageDAO().uploadImage(request.getImageUrl(), request.getUsername());
+        String imageURL;
+        try {
+            imageURL = daoFactory.getImageDAO().uploadImage(request.getImageUrl(), request.getUsername());
+            //request.setImageUrl(imageURL);
+            System.out.println("Image URL: " + imageURL);
+        } catch (Exception e) {
+            System.out.println("Image URL: " + e.getMessage());
+            e.printStackTrace();
+            throw new RuntimeException("[Server Error] Unable to upload image to S3");
+        }
+
+        //String imageURL = daoFactory.getImageDAO().uploadImage(request.getImageUrl(), request.getUsername());
 
         // register user
-        daoFactory.getUserDAO().register(request.getUsername(), request.getPassword(), request.getFirstName(), request.getLastName(), imageURL);
+        try {
+            daoFactory.getUserDAO().register(request.getUsername(), request.getPassword(), request.getFirstName(), request.getLastName(), imageURL);
+
+            System.out.println("Register User: Success");
+        } catch (Exception e) {
+            System.out.println("Register User: Failed");
+            e.printStackTrace();
+            throw new RuntimeException("[Server Error] Unable to register user");
+        }
+        //daoFactory.getUserDAO().register(request.getUsername(), request.getPassword(), request.getFirstName(), request.getLastName(), imageURL);
 
         // Create an auth token for the new user's current session and retrieve the user's profile
-        Authtoken authtoken = daoFactory.getAuthtokenDAO().createAuthToken(request.getUsername());
+        Authtoken authtoken;
+        try {
+            authtoken = daoFactory.getAuthtokenDAO().createAuthToken(request.getUsername());
+            System.out.println("Create Auth Token: Success");
+        } catch (Exception e) {
+            System.out.println("Create Auth Token: Failed");
+            e.printStackTrace();
+            throw new RuntimeException("[Server Error] Unable to create auth token");
+        }
+        //Authtoken authtoken = daoFactory.getAuthtokenDAO().createAuthToken(request.getUsername());
 
         //User user = daoFactory.getUserDAO().getUser(request.getUsername());
         User user = new User(request.getFirstName(), request.getLastName(),
-                          request.getUsername(), imageURL);
+                request.getUsername(), imageURL);
 
         /**
-         * Or do  User user = new User(request.getFirstName(), request.getLastName(),
-         *                 request.getUsername(), imageURL);
-         *
          * Not too sure if we need to get the user from the database or not, but I think
          * it'll be faster to just create a new user object instead of getting it from the
          * database.
@@ -124,6 +155,10 @@ public class UserService {
         }
 
         User user = daoFactory.getUserDAO().getUser(request.getAlias());
+        if (user == null) {
+            return new GetUserResponse("User does not exist");
+        }
+
         return new GetUserResponse(user);
     }
 

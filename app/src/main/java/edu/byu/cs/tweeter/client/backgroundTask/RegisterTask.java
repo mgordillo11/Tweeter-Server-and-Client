@@ -50,12 +50,12 @@ public class RegisterTask extends AuthenticateTask {
                 return new Pair<>(response.getUser(), response.getAuthToken());
             } else {
                 Log.e(BackgroundTask.MESSAGE_KEY, response.getMessage());
-                throw new RuntimeException("[BadRequest400Exception] Unable to register user");
+                throw new RuntimeException("[Bad Request] Unable to register user");
             }
         } catch (IOException | TweeterRemoteException ex) {
             ex.printStackTrace();
             Log.e(BackgroundTask.EXCEPTION_KEY, ex.getMessage(), ex);
-            throw new RuntimeException("[ServerError500Exception] Unable to register user");
+            throw new RuntimeException("[Server Error] Unable to register user");
         }
     }
 }

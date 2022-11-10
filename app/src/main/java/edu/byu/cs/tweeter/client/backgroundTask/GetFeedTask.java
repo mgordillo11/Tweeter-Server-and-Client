@@ -27,12 +27,11 @@ public class GetFeedTask extends PagedTask<Status> {
 
     @Override
     protected Pair<List<Status>, Boolean> getItems() {
-        if (getLastItem() == null) {
-            lastItem = getFakeData().getFakeStatuses().get(0);
-        }
 
         try {
-            FeedRequest request = new FeedRequest(authToken, getLastItem(), getTargetUser().getAlias(), getLimit());
+            Status lastStatusAlias = getLastItem() == null ? null : getLastItem();
+
+            FeedRequest request = new FeedRequest(authToken, lastStatusAlias, getTargetUser().getAlias(), getLimit());
             FeedResponse response = getServerFacade().getFeed(request, "/getfeed");
 
             if (response.isSuccess()) {

@@ -47,6 +47,8 @@ public class FollowService {
             throw new RuntimeException("[Bad Request] Request needs to have a follower alias");
         } else if (request.getLimit() <= 0) {
             throw new RuntimeException("[Bad Request] Request needs to have a positive limit");
+        } else if (request.getAuthtoken() == null) {
+            throw new RuntimeException("[Bad Request] Request needs to have an authtoken");
         }
 
         boolean validAuthtoken = daoFactory.getAuthtokenDAO().isValidAuthToken(request.getAuthtoken());
@@ -66,8 +68,6 @@ public class FollowService {
             throw new RuntimeException("[Bad Request] Request needs to have a positive limit");
         } else if(request.getAuthtoken() == null) {
             throw new RuntimeException("[Bad Request] Request needs to have an auth token");
-        } else if (request.getLastFollowerAlias() == null) {
-            throw new RuntimeException("[Bad Request] Request needs to have a last follower alias");
         }
 
         boolean validAuthtoken = daoFactory.getAuthtokenDAO().isValidAuthToken(request.getAuthtoken());

@@ -5,35 +5,34 @@ import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbParti
 
 @DynamoDbBean
 public class DynamoDBAuthtoken {
-    /**
-     * Value of the auth token.
-     */
-    public String token;
-
-    public String alias;
-
-    /**
-     * String representation of date/time at which the auth token was created.
-     */
-    public String datetime;
+    private String token;
+    private String timeStamp;
+    private String alias;
 
     public DynamoDBAuthtoken() {
     }
 
-    public DynamoDBAuthtoken(String token) {
+    public DynamoDBAuthtoken(String token, String timeStamp, String alias) {
         this.token = token;
-    }
-
-    public DynamoDBAuthtoken(String token, String datetime, String alias) {
-        this.token = token;
-        this.datetime = datetime;
+        this.timeStamp = timeStamp;
         this.alias = alias;
     }
-
 
     @DynamoDbPartitionKey
     public String getToken() {
         return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
+
+    public String getTimeStamp() {
+        return timeStamp;
+    }
+
+    public void setTimeStamp(String timeStamp) {
+        this.timeStamp = timeStamp;
     }
 
     public String getAlias() {
@@ -42,13 +41,5 @@ public class DynamoDBAuthtoken {
 
     public void setAlias(String alias) {
         this.alias = alias;
-    }
-
-    public void setToken(String token) {
-        this.token = token;
-    }
-
-    public String getDatetime() {
-        return datetime;
     }
 }

@@ -9,6 +9,19 @@ import edu.byu.cs.tweeter.server.dao.DynamoDB.DynamoDBFactory;
 import edu.byu.cs.tweeter.server.service.UserService;
 
 public class RegisterHandler implements RequestHandler<RegisterRequest, RegisterResponse> {
+    public static void main(String[] args) {
+        String imageURL = "error: constant string too long";
+
+        RegisterRequest request = new RegisterRequest(
+                "Manuel",
+                "Gordillo",
+                "mgordillo",
+                "password",
+                "testImageToBucket");
+
+        UserService userService = new UserService(new DynamoDBFactory());
+        userService.register(request);
+    }
     @Override
     public RegisterResponse handleRequest(RegisterRequest registerRequest, Context context) {
         UserService userService = new UserService(new DynamoDBFactory());

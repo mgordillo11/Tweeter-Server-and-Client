@@ -54,8 +54,6 @@ public class StatusService {
             throw new RuntimeException("[Bad Request] AuthToken is null");
         } else if (request.getLimit() < 0) {
             throw new RuntimeException("[Bad Request] Limit is less than 0");
-        } else if (request.getLastStatus() == null) {
-            throw new RuntimeException("[Bad Request] LastStatus is null");
         } else if (request.getAlias() == null) {
             throw new RuntimeException("[Bad Request] Alias is null");
         }
@@ -73,8 +71,6 @@ public class StatusService {
             throw new RuntimeException("[Bad Request] AuthToken is null");
         } else if (request.getLimit() < 0) {
             throw new RuntimeException("[Bad Request] Limit is less than 0");
-        } else if (request.getLastStatus() == null) {
-            throw new RuntimeException("[Bad Request] LastStatus is null");
         } else if (request.getAlias() == null) {
             throw new RuntimeException("[Bad Request] Alias is null");
         }
