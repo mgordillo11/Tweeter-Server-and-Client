@@ -21,6 +21,10 @@ public class StoryResponse extends PagedResponse {
         return statuses;
     }
 
+    public void setStatuses(List<Status> statuses) {
+        this.statuses = statuses;
+    }
+
     @Override
     public boolean equals(Object param) {
         if (this == param) return true;

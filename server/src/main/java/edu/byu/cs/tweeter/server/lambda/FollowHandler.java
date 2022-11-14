@@ -12,8 +12,8 @@ import edu.byu.cs.tweeter.server.service.FollowService;
 
 public class FollowHandler implements RequestHandler<FollowRequest, FollowResponse> {
     public static void main(String[] args) {
-        Authtoken authtoken = new Authtoken("ea5c553c-ab43-4374-88c9-52de5a283f05", "2022-11-11");
-        User user = new User("Carlos", "Valdez", "@carlos", "https://faculty.cs.byu.edu/~jwilkerson/cs340/tweeter/images/donald_duck.png");
+        Authtoken authtoken = new Authtoken("1f5200af-4161-46ae-ac60-283c565ba4f2", "2022-11-11");
+        User user = new User("Carlos", "Valdez", "@ryth", "https://faculty.cs.byu.edu/~jwilkerson/cs340/tweeter/images/donald_duck.png");
 
         FollowRequest request = new FollowRequest(authtoken, user);
 

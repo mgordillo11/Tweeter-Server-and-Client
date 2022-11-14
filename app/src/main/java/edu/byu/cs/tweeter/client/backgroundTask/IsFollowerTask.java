@@ -44,7 +44,7 @@ public class IsFollowerTask extends AuthenticatedTask {
             IsFollowerResponse response = getServerFacade().isFollower(request, "/isfollower");
 
             if (response.isSuccess()) {
-                isFollower = response.isFollower();
+                isFollower = response.getFollower();
             } else {
                 throw new RuntimeException("[Bad Request] " + response.getMessage());
             }

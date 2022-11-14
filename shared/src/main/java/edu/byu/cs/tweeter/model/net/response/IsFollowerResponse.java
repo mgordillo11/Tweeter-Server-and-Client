@@ -1,18 +1,22 @@
 package edu.byu.cs.tweeter.model.net.response;
 
 public class IsFollowerResponse extends Response {
-    private boolean isFollower;
+    private boolean follower;
 
     public IsFollowerResponse(String message) {
         super(false, message);
     }
 
-    public IsFollowerResponse(boolean isFollower) {
+    public IsFollowerResponse(boolean follower) {
         super(true, null);
-        this.isFollower = isFollower;
+        this.follower = follower;
     }
 
-    public boolean isFollower() {
-        return isFollower;
+    public boolean getFollower() {
+        return follower;
+    }
+
+    public void setFollower(boolean follower) {
+        this.follower = follower;
     }
 }

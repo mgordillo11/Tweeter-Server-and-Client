@@ -46,24 +46,26 @@ public class DynamoDBFollowDAO extends DynamoDBMainDAO implements IFollowDAO {
     @Override
     public Pair<List<User>, Boolean> getFollowees(FollowingRequest request) {
         List<DynamoDBFollows> followees = getDynamoFollowees(request);
+        List<User> followeesUsers = followeesToUsers(followees);
 
-        if (followees == null || followees.size() == 0) {
-            return new Pair<>(new ArrayList<>(), false);
+        if (followees.size() < request.getLimit()) {
+            return new Pair<>(followeesUsers, false);
         }
 
-        List<User> followeesUsers = followsToUsers(followees);
+        //List<User> followeesUsers = followsToUsers(followees);
         return new Pair<>(followeesUsers, true);
     }
 
     @Override
     public Pair<List<User>, Boolean> getFollowers(FollowersRequest request) {
         List<DynamoDBFollows> followers = getDynamoFollowers(request);
+        List<User> followersUsers = followersToUsers(followers);
 
-        if (followers.size() == 0) {
-            return new Pair<>(new ArrayList<>(), false);
+        if (followers.size() < request.getLimit()) {
+            return new Pair<>(followersUsers, false);
         }
 
-        List<User> followersUsers = followsToUsers(followers);
+        //List<User> followersUsers = followsToUsers(followers);
         return new Pair<>(followersUsers, true);
     }
 
@@ -121,16 +123,16 @@ public class DynamoDBFollowDAO extends DynamoDBMainDAO implements IFollowDAO {
         Key key = Key.builder().partitionValue(request.getFollower().getAlias())
                 .sortValue(request.getFollowee().getAlias()).build();
 
-        QueryEnhancedRequest queryEnhancedRequest = QueryEnhancedRequest.builder()
-                .queryConditional(QueryConditional.keyEqualTo(key))
-                .build();
+        DynamoDBFollows follows = followsTable.getItem(
+                (GetItemEnhancedRequest.Builder requestBuilder) -> requestBuilder.key(key));
 
-        return followsTable.query(queryEnhancedRequest)
-                .items()
-                .stream().findAny().isPresent()
-                ? new IsFollowerResponse(true)
-                : new IsFollowerResponse(false);
-
+        if (follows == null) {
+            System.err.println("Not following");
+            return new IsFollowerResponse(false);
+        } else {
+            System.err.println("Following");
+            return new IsFollowerResponse(true);
+        }
     }
 
     @Override
@@ -149,18 +151,24 @@ public class DynamoDBFollowDAO extends DynamoDBMainDAO implements IFollowDAO {
 
     @Override
     public int getFollowersCount(String userAlias) {
-        Key key = Key.builder().partitionValue(userAlias).build();
-
-        QueryEnhancedRequest.Builder requestBuilder = QueryEnhancedRequest.builder()
-                .queryConditional(QueryConditional.keyEqualTo(key));
-
-        QueryEnhancedRequest queryEnhancedRequest = requestBuilder.build();
-
-        SdkIterable<Page<DynamoDBFollows>> results = followsIndex.query(queryEnhancedRequest);
-        PageIterable<DynamoDBFollows> pages = PageIterable.create(results);
-
-        return (int) pages.stream()
-                .limit(1).count();
+//        Key key = Key.builder().partitionValue(userAlias).build();
+//
+//        QueryEnhancedRequest.Builder requestBuilder = QueryEnhancedRequest.builder()
+//                .queryConditional(QueryConditional.keyEqualTo(key));
+//
+//        QueryEnhancedRequest queryEnhancedRequest = requestBuilder.build();
+//
+//        SdkIterable<Page<DynamoDBFollows>> results = followsIndex.query(queryEnhancedRequest);
+//        PageIterable<DynamoDBFollows> pages = PageIterable.create(results);
+//
+//        List<DynamoDBFollows> followers = new ArrayList<>();;
+//
+//        pages.stream()
+//                .limit(1)
+//                .forEach(visitsPage -> followers.addAll(visitsPage.items()));
+//
+//        return followers.size();
+        return getFollowersAlias(userAlias).size();
     }
 
     @Override
@@ -192,18 +200,18 @@ public class DynamoDBFollowDAO extends DynamoDBMainDAO implements IFollowDAO {
     public List<DynamoDBFollows> getDynamoFollowers(FollowersRequest request) {
         int limit = request.getLimit();
 
-        Key key = Key.builder().partitionValue(request.getLastFollowerAlias()).build();
+        Key key = Key.builder().partitionValue(request.getFollowerAlias()).build();
 
         QueryEnhancedRequest.Builder requestBuilder = QueryEnhancedRequest.builder()
                 .queryConditional(QueryConditional.keyEqualTo(key))
-                .limit(limit)
-                .scanIndexForward(false);
+                .limit(limit);
+                //.scanIndexForward(false);
 
-        if (isNonEmptyString(request.getLastFollowerAlias())) {
+        if (request.getLastFollowerAlias() != null) {
             Map<String, AttributeValue> startKey = new HashMap<>();
 
-            startKey.put(followerAttr, AttributeValue.builder().s(request.getFollowerAlias()).build());
-            startKey.put(followeeAttr, AttributeValue.builder().s(request.getLastFollowerAlias()).build());
+            startKey.put(followeeAttr, AttributeValue.builder().s(request.getFollowerAlias()).build());
+            startKey.put(followerAttr, AttributeValue.builder().s(request.getLastFollowerAlias()).build());
 
             requestBuilder.exclusiveStartKey(startKey);
         }
@@ -220,6 +228,8 @@ public class DynamoDBFollowDAO extends DynamoDBMainDAO implements IFollowDAO {
                 .limit(1)
                 .forEach(visitsPage -> follows.addAll(visitsPage.items()));
 
+        System.err.println("Follows Size: " + follows.size());
+
         return follows;
     }
 
@@ -234,7 +244,7 @@ public class DynamoDBFollowDAO extends DynamoDBMainDAO implements IFollowDAO {
                 .queryConditional(QueryConditional.keyEqualTo(key))
                 .scanIndexForward(true);
 
-        if (isNonEmptyString(request.getLastFolloweeAlias())) {
+        if (request.getLastFolloweeAlias() != null) {
             Map<String, AttributeValue> startKey = new HashMap<>();
 
             startKey.put(followerAttr, AttributeValue.builder().s(request.getFollowerAlias()).build());
@@ -252,7 +262,7 @@ public class DynamoDBFollowDAO extends DynamoDBMainDAO implements IFollowDAO {
                 .collect(Collectors.toList());
     }
 
-    public List<User> followsToUsers(List<DynamoDBFollows> followees) {
+    public List<User> followeesToUsers(List<DynamoDBFollows> followees) {
         List<User> followeesUsers = new ArrayList<>();
 
         for (DynamoDBFollows followee : followees) {
@@ -262,7 +272,13 @@ public class DynamoDBFollowDAO extends DynamoDBMainDAO implements IFollowDAO {
         return followeesUsers;
     }
 
-    private boolean isNonEmptyString(String value) {
-        return (value != null && value.length() > 0);
+    public List<User> followersToUsers(List<DynamoDBFollows> followees) {
+        List<User> followeesUsers = new ArrayList<>();
+
+        for (DynamoDBFollows followee : followees) {
+            followeesUsers.add(userDAO.getUser(followee.getFollower_handle()));
+        }
+
+        return followeesUsers;
     }
 }

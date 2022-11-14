@@ -43,6 +43,10 @@ public class FollowingResponse extends PagedResponse {
         return followees;
     }
 
+    public void setFollowees(List<User> followees) {
+        this.followees = followees;
+    }
+
     @Override
     public boolean equals(Object param) {
         if (this == param) {

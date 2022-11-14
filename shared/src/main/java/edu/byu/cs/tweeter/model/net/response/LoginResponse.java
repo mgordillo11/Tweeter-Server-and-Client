@@ -50,4 +50,12 @@ public class LoginResponse extends Response {
     public Authtoken getAuthToken() {
         return authToken;
     }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public void setAuthToken(Authtoken authToken) {
+        this.authToken = authToken;
+    }
 }
