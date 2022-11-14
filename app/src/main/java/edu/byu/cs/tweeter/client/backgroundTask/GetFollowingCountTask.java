@@ -30,7 +30,7 @@ public class GetFollowingCountTask extends GetCountTask {
             if (response.isSuccess()) {
                 return response.getCount();
             } else {
-                throw new RuntimeException("[Bad Request] Unable to get following count");
+                throw new RuntimeException("[Bad Request] " + response.getMessage());
             }
         } catch (IOException | TweeterRemoteException ex) {
             ex.printStackTrace();

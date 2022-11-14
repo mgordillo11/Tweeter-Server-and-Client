@@ -17,8 +17,7 @@ public class DynamoDBUserDAO extends DynamoDBMainDAO implements IUserDAO {
         try {
             return getUser(username);
         } catch (Exception e) {
-            System.err.println("Unable to get user");
-            System.err.println(e.getMessage());
+            System.err.println("Unable to login user: " + username);
             return null;
         }
     }

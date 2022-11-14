@@ -91,7 +91,7 @@ public class MainPresenter extends Presenter {
 
     public String getFormattedDateTime() {
         Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-        return timestamp.toString();
+        return String.valueOf(timestamp.getTime());
     }
 
     public List<String> parseURLs(String post) {

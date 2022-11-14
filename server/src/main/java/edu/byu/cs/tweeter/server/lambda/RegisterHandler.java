@@ -13,11 +13,11 @@ public class RegisterHandler implements RequestHandler<RegisterRequest, Register
         String imageURL = "error: constant string too long";
 
         RegisterRequest request = new RegisterRequest(
-                "Manuel",
-                "Gordillo",
-                "mgordillo",
-                "password",
-                "testImageToBucket");
+                "Carlos",
+                "Valdez",
+                "@carlos",
+                "2",
+                "https://faculty.cs.byu.edu/~jwilkerson/cs340/tweeter/images/donald_duck.png");
 
         UserService userService = new UserService(new DynamoDBFactory());
         userService.register(request);

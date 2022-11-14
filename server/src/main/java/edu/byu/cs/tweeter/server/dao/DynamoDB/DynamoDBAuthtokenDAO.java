@@ -24,12 +24,7 @@ public class DynamoDBAuthtokenDAO extends DynamoDBMainDAO implements IAuthtokenD
         String token = UUID.randomUUID().toString();
         DynamoDBAuthtoken dynamoDBAuthtoken = new DynamoDBAuthtoken(token, timeStamp, username);
 
-        try {
-            table.putItem(dynamoDBAuthtoken);
-        } catch (Exception e) {
-            System.err.println("Unable to create auth token");
-            return null;
-        }
+        table.putItem(dynamoDBAuthtoken);
 
         return dynamoAuthToAuth(dynamoDBAuthtoken);
     }
@@ -41,7 +36,6 @@ public class DynamoDBAuthtokenDAO extends DynamoDBMainDAO implements IAuthtokenD
             table.deleteItem(key);
         } catch (Exception e) {
             System.err.println("Unable to delete auth token");
-            System.err.println(e.getMessage());
             return new LogoutResponse(e.getMessage());
         }
 
@@ -50,6 +44,7 @@ public class DynamoDBAuthtokenDAO extends DynamoDBMainDAO implements IAuthtokenD
 
     @Override
     public boolean isValidAuthToken(Authtoken authToken) {
+        // Makes sure the token is less than a day old
         try {
             DynamoDBAuthtoken token = getAuthToken(authToken);
 
@@ -63,7 +58,7 @@ public class DynamoDBAuthtokenDAO extends DynamoDBMainDAO implements IAuthtokenD
                     .between(start_date,
                             end_date);
 
-            return diff.getDays() >= -1;
+            return diff.getDays() > -1;
         } catch (Exception e) {
             System.err.println("Unable to get auth token");
             System.err.println(e.getMessage());
@@ -77,8 +72,6 @@ public class DynamoDBAuthtokenDAO extends DynamoDBMainDAO implements IAuthtokenD
     }
 
     public DynamoDBAuthtoken getAuthToken(Authtoken authToken) {
-        System.err.println(authToken.getToken());
-
         String token = authToken.getToken();
         Key key = Key.builder().partitionValue(token).build();
 

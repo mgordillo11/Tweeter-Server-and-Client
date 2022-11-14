@@ -22,7 +22,7 @@ public class UserService {
         this.hashing = new PBKDF2WithHmacSHA1Hashing();
     }
 
-    public LoginResponse login(LoginRequest request)  {
+    public LoginResponse login(LoginRequest request) {
         if (request.getUsername() == null) {
             throw new RuntimeException("[Bad Request] Missing a username");
         } else if (request.getPassword() == null) {
@@ -80,14 +80,13 @@ public class UserService {
         // hash password, and then request password to the hashed password
         try {
             hashedPassword = hashing.generateStrongPasswordHash(request.getPassword());
-            //request.setPassword(hashedPassword);
         } catch (Exception e) {
             e.printStackTrace();
             throw new RuntimeException("[Server Error] Unable to hash password");
         }
 
         // upload image to S3, and get the URL
-        String imageURL;
+        String imageURL = request.getImageUrl();
         try {
             imageURL = daoFactory.getImageDAO().uploadImage(request.getImageUrl(), request.getUsername());
             System.out.println("Image URL: " + imageURL);
@@ -130,7 +129,7 @@ public class UserService {
 
         boolean activeUser = daoFactory.getAuthtokenDAO().isValidAuthToken(request.getAuthToken());
         if (!activeUser) {
-            return new GetUserResponse("Authtoken is invalid, and User is no longer active");
+            return new GetUserResponse("Session expired, please log out and log in again");
         }
 
         User user = daoFactory.getUserDAO().getUser(request.getAlias());

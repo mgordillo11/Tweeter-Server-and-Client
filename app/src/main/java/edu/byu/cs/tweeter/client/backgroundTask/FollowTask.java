@@ -36,11 +36,9 @@ public class FollowTask extends AuthenticatedTask {
             FollowRequest request = new FollowRequest(authToken, followee);
             FollowResponse response = getServerFacade().follow(request, "/follow");
 
-            if(response.isSuccess()) {
-                // Nothing needs to be added to the bundle for this task
-            } else {
+            if(!response.isSuccess()) {
                 Log.e(BackgroundTask.MESSAGE_KEY, response.getMessage());
-                throw new RuntimeException("[Bad Request] Unable to follow user");
+                throw new RuntimeException("[Bad Request] " + response.getMessage());
             }
         } catch (IOException | TweeterRemoteException ex) {
             ex.printStackTrace();

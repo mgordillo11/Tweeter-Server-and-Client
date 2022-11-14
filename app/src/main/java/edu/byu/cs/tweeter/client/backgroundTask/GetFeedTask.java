@@ -37,7 +37,7 @@ public class GetFeedTask extends PagedTask<Status> {
             if (response.isSuccess()) {
                 return new Pair<>(response.getStatuses(), response.getHasMorePages());
             } else {
-                throw new RuntimeException("[Bad Request] Unable to retrieve feed");
+                throw new RuntimeException("[Bad Request] " + response.getMessage());
             }
 
         } catch (IOException | TweeterRemoteException ex) {

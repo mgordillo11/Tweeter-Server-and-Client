@@ -18,12 +18,8 @@ import edu.byu.cs.tweeter.model.net.response.GetFollowingCountResponse;
 import edu.byu.cs.tweeter.model.net.response.IsFollowerResponse;
 import edu.byu.cs.tweeter.model.net.response.UnfollowResponse;
 import edu.byu.cs.tweeter.server.dao.DAOFactory;
-import edu.byu.cs.tweeter.server.dao.DynamoDB.FollowDAO;
 import edu.byu.cs.tweeter.util.Pair;
 
-/**
- * Contains the business logic for getting the users a user is following.
- */
 public class FollowService {
     private final DAOFactory daoFactory;
 
@@ -31,15 +27,6 @@ public class FollowService {
         this.daoFactory = daoFactory;
     }
 
-    /**
-     * Returns the users that the user specified in the request is following. Uses information in
-     * the request object to limit the number of followees returned and to return the next set of
-     * followees after any that were returned in a previous request. Uses the {@link FollowDAO} to
-     * get the followees.
-     *
-     * @param request contains the data required to fulfill the request.
-     * @return the followees.
-     */
     public FollowingResponse getFollowees(FollowingRequest request) {
         if (request.getFollowerAlias() == null) {
             throw new RuntimeException("[Bad Request] Request needs to have a follower alias");
@@ -51,7 +38,7 @@ public class FollowService {
 
         boolean validAuthtoken = daoFactory.getAuthtokenDAO().isValidAuthToken(request.getAuthtoken());
         if (!validAuthtoken) {
-            return new FollowingResponse("Authtoken is invalid, and User is no longer active");
+            return new FollowingResponse("Session expired, please log out and log in again");
         }
 
 
@@ -70,7 +57,7 @@ public class FollowService {
 
         boolean validAuthtoken = daoFactory.getAuthtokenDAO().isValidAuthToken(request.getAuthtoken());
         if (!validAuthtoken) {
-            return new FollowersResponse("Authtoken is invalid, and User is no longer active");
+            return new FollowersResponse("Session expired, please log out and log in again");
         }
 
         Pair<List<User>, Boolean> followers = daoFactory.getFollowDAO().getFollowers(request);
@@ -86,7 +73,7 @@ public class FollowService {
 
         boolean validAuthtoken = daoFactory.getAuthtokenDAO().isValidAuthToken(request.getAuthtoken());
         if (!validAuthtoken) {
-            return new UnfollowResponse("Authtoken is invalid, and User is no longer active");
+            return new UnfollowResponse("Session expired, please log out and log in again");
         }
 
 
@@ -105,7 +92,7 @@ public class FollowService {
 
         boolean validAuthtoken = daoFactory.getAuthtokenDAO().isValidAuthToken(request.getAuthtoken());
         if (!validAuthtoken) {
-            return new FollowResponse("Authtoken is invalid, and User is no longer active");
+            return new FollowResponse("Session expired, please log out and log in again");
         }
 
         String currentUserAlias = daoFactory.getAuthtokenDAO().getAliasFromAuthToken(request.getAuthtoken());
@@ -125,7 +112,7 @@ public class FollowService {
 
         boolean validAuthtoken = daoFactory.getAuthtokenDAO().isValidAuthToken(request.getAuthtoken());
         if (!validAuthtoken) {
-            return new IsFollowerResponse("Authtoken is invalid, and User is no longer active");
+            return new IsFollowerResponse("Session expired, please log out and log in again");
         }
 
         return daoFactory.getFollowDAO().isFollowing(request);
@@ -140,7 +127,7 @@ public class FollowService {
 
         boolean validAuthtoken = daoFactory.getAuthtokenDAO().isValidAuthToken(request.getAuthtoken());
         if (!validAuthtoken) {
-            return new GetFollowingCountResponse("Authtoken is invalid, and User is no longer active");
+            return new GetFollowingCountResponse("Session expired, please log out and log in again");
         }
 
         int numOfFollowees = daoFactory.getFollowDAO().getFollowingCount(request.getUser().getAlias());
@@ -156,7 +143,7 @@ public class FollowService {
 
         boolean validAuthtoken = daoFactory.getAuthtokenDAO().isValidAuthToken(request.getAuthtoken());
         if (!validAuthtoken) {
-            return new GetFollowersCountResponse("Authtoken is invalid, and User is no longer active");
+            return new GetFollowersCountResponse("Session expired, please log out and log in again");
         }
 
         int numOfFollowers = daoFactory.getFollowDAO().getFollowersCount(request.getUser().getAlias());

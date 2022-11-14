@@ -50,7 +50,7 @@ public class RegisterTask extends AuthenticateTask {
                 return new Pair<>(response.getUser(), response.getAuthToken());
             } else {
                 Log.e(BackgroundTask.MESSAGE_KEY, response.getMessage());
-                throw new RuntimeException("[Bad Request] Unable to register user");
+                throw new RuntimeException("[Bad Request] " + response.getMessage());
             }
         } catch (IOException | TweeterRemoteException ex) {
             ex.printStackTrace();

@@ -39,12 +39,12 @@ public class GetUserTask extends AuthenticatedTask {
             if(response.isSuccess()) {
                 return response.getUser();
             } else {
-                throw new RuntimeException("[BadRequest400Exception] Unable to get user");
+                throw new RuntimeException("[Bad Request] " + response.getMessage());
             }
         } catch (IOException | TweeterRemoteException ex) {
             ex.printStackTrace();
             Log.e(BackgroundTask.EXCEPTION_KEY, ex.getMessage(), ex);
-            throw new RuntimeException("[ServerError500Exception] Unable to get user");
+            throw new RuntimeException("[Server Error] Unable to get user");
         }
     }
 

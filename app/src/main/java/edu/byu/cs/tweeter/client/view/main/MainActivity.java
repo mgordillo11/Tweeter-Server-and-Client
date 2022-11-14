@@ -217,5 +217,6 @@ public class MainActivity extends AppCompatActivity implements StatusDialogFragm
         showPostingToast(true);
 
         mainPresenter.statusPost(post);
+
     }
 }

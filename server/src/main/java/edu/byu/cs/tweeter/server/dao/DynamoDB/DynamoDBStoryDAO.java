@@ -71,7 +71,7 @@ public class DynamoDBStoryDAO extends DynamoDBMainDAO implements IStoryDAO {
 
     @Override
     public boolean postStatus(Status status) {
-        Long datetime = Timestamp.valueOf(status.getDate()).getTime();
+        Long datetime = Long.valueOf(status.getDate());
 
         try {
             DynamoDBStatus dynamoDBStatus = new DynamoDBStatus(status.getPost(),

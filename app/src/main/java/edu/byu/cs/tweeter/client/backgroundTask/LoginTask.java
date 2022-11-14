@@ -32,7 +32,7 @@ public class LoginTask extends AuthenticateTask {
             if(response.isSuccess()) {
                 return new Pair<>(response.getUser(), response.getAuthToken());
             } else {
-                throw new RuntimeException("[Bad Request] Unable to login user");
+                throw new RuntimeException("[Bad Request] " + response.getMessage());
             }
         } catch (IOException | TweeterRemoteException ex) {
             ex.printStackTrace();

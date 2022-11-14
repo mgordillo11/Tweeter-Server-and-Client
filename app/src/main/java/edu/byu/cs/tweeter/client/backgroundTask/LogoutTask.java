@@ -29,11 +29,9 @@ public class LogoutTask extends AuthenticatedTask {
             LogoutRequest request = new LogoutRequest(authToken);
             LogoutResponse response = getServerFacade().logout(request, "/logout");
 
-            if (response.isSuccess()) {
-                // Nothing needs to be added to the bundle for this task
-            } else {
+            if (!response.isSuccess()) {
                 Log.e(BackgroundTask.MESSAGE_KEY, response.getMessage());
-                throw new RuntimeException("[Bad Request] Unable to logout user");
+                throw new RuntimeException("[Bad Request] " + response.getMessage());
             }
         } catch (IOException | TweeterRemoteException ex) {
             ex.printStackTrace();

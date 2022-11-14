@@ -48,7 +48,6 @@ public class DynamoDBFollowDAO extends DynamoDBMainDAO implements IFollowDAO {
         List<DynamoDBFollows> followees = getDynamoFollowees(request);
 
         if (followees == null || followees.size() == 0) {
-            // Instead of returning null, return an empty list
             return new Pair<>(new ArrayList<>(), false);
         }
 
@@ -61,7 +60,6 @@ public class DynamoDBFollowDAO extends DynamoDBMainDAO implements IFollowDAO {
         List<DynamoDBFollows> followers = getDynamoFollowers(request);
 
         if (followers.size() == 0) {
-            // Instead of returning null, return an empty list
             return new Pair<>(new ArrayList<>(), false);
         }
 
@@ -85,7 +83,12 @@ public class DynamoDBFollowDAO extends DynamoDBMainDAO implements IFollowDAO {
         }
 
         DynamoDBFollows follow = new DynamoDBFollows(followerAlias, followeeAlias);
-        followsTable.putItem(follow);
+
+        try {
+            followsTable.putItem(follow);
+        } catch (Exception e) {
+            return new FollowResponse("Failed to follow");
+        }
 
         return new FollowResponse();
     }
@@ -104,7 +107,12 @@ public class DynamoDBFollowDAO extends DynamoDBMainDAO implements IFollowDAO {
             return new UnfollowResponse("User not found");
         }
 
-        followsTable.deleteItem(userToUnfollow);
+        try {
+            followsTable.deleteItem(userToUnfollow);
+        } catch (Exception e) {
+            return new UnfollowResponse("Failed to unfollow");
+        }
+
         return new UnfollowResponse();
     }
 
@@ -164,16 +172,21 @@ public class DynamoDBFollowDAO extends DynamoDBMainDAO implements IFollowDAO {
 
         QueryEnhancedRequest queryEnhancedRequest = requestBuilder.build();
 
-        List<String> followersAliases = new ArrayList<>();
+        List<DynamoDBFollows> followers = new ArrayList<>();
+
         SdkIterable<Page<DynamoDBFollows>> results = followsIndex.query(queryEnhancedRequest);
         PageIterable<DynamoDBFollows> pages = PageIterable.create(results);
 
-        while (pages.iterator().hasNext()) {
-            Page<DynamoDBFollows> page = pages.iterator().next();
-            page.items().forEach(follow -> followersAliases.add(follow.getFollower_handle()));
+        pages.stream()
+                .limit(1)
+                .forEach(visitsPage -> followers.addAll(visitsPage.items()));
+
+        List<String> followersAlias = new ArrayList<>();
+        for (DynamoDBFollows follower : followers) {
+            followersAlias.add(follower.getFollower_handle());
         }
 
-        return followersAliases;
+        return followersAlias;
     }
 
     public List<DynamoDBFollows> getDynamoFollowers(FollowersRequest request) {

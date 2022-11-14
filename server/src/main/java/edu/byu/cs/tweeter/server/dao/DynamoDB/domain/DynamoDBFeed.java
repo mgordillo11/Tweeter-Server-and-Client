@@ -8,7 +8,6 @@ import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbSortK
 public class DynamoDBFeed {
     public String receiver_alias;
     public Long datetime;
-
     public DynamoDBStatus status;
 
     public DynamoDBFeed() {

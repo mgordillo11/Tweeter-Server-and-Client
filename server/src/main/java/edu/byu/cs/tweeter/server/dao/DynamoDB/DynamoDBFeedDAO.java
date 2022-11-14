@@ -23,7 +23,8 @@ import software.amazon.awssdk.services.dynamodb.model.AttributeValue;
 
 public class DynamoDBFeedDAO extends DynamoDBMainDAO implements IFeedDAO {
     private static final String TABLE_NAME = "feed";
-    private final DynamoDbTable<DynamoDBFeed> table = enhancedClient.table(TABLE_NAME, TableSchema.fromBean(DynamoDBFeed.class));
+    private final DynamoDbTable<DynamoDBFeed> table =
+            enhancedClient.table(TABLE_NAME, TableSchema.fromBean(DynamoDBFeed.class));
 
     private final DynamoDBStoryDAO storyDAO = new DynamoDBStoryDAO();
 
@@ -56,8 +57,8 @@ public class DynamoDBFeedDAO extends DynamoDBMainDAO implements IFeedDAO {
         }
 
         QueryEnhancedRequest queryRequest = requestBuilder.build();
-        List<DynamoDBFeed> results = new ArrayList<>();
 
+        List<DynamoDBFeed> results;
 
         results = table.query(queryRequest)
                 .items()
@@ -83,14 +84,18 @@ public class DynamoDBFeedDAO extends DynamoDBMainDAO implements IFeedDAO {
     @Override
     public void updateFeed(String alias, PostStatusRequest request) {
         Status status = request.getStatus();
-        String datetime = status.getDate();
-        Long convertedTime = Timestamp.valueOf(datetime).getTime();
+        Long convertedTime = Long.valueOf(status.getDate());
 
         DynamoDBStatus dynamoDBStatus = new DynamoDBStatus(status.getPost(),
                 status.getUser().getAlias(), convertedTime, status.getUrls(), status.getMentions());
 
         DynamoDBFeed addedFeed = new DynamoDBFeed(alias, convertedTime, dynamoDBStatus);
 
-        table.putItem(addedFeed);
+        try {
+            table.putItem(addedFeed);
+        } catch (Exception e) {
+            System.err.println("Unable to add feed item: " + alias + " " + convertedTime);
+            throw new RuntimeException(e);
+        }
     }
 }

@@ -28,7 +28,7 @@ public class StatusService {
 
         boolean validAuthtoken = daoFactory.getAuthtokenDAO().isValidAuthToken(request.getAuthToken());
         if (!validAuthtoken) {
-            return new PostStatusResponse("Authtoken is invalid, and User is no longer active");
+            return new PostStatusResponse("Session expired, please log out and log in again");
         }
 
         boolean statusPosted = daoFactory.getStoryDAO().postStatus(request.getStatus());
@@ -36,7 +36,6 @@ public class StatusService {
             return new PostStatusResponse("An error occurred while posting the status");
         }
 
-        // COME BACK TO THIS, DON'T KNOW HOW I'M GONNA UPDATE THE FEEDS CORRECTLY
         List<String> followers = daoFactory.getFollowDAO().getFollowersAlias(request.getStatus().getUser().getAlias());
         for (String follower : followers) {
             daoFactory.getFeedDAO().updateFeed(follower, request);
@@ -56,7 +55,7 @@ public class StatusService {
 
         boolean validAuthtoken = daoFactory.getAuthtokenDAO().isValidAuthToken(request.getAuthtoken());
         if (!validAuthtoken) {
-            return new StoryResponse("Authtoken is invalid, and User is no longer active");
+            return new StoryResponse("Session expired, please log out and log in again");
         }
 
         return daoFactory.getStoryDAO().getStory(request);
@@ -73,7 +72,7 @@ public class StatusService {
 
         boolean validAuthtoken = daoFactory.getAuthtokenDAO().isValidAuthToken(request.getAuthtoken());
         if (!validAuthtoken) {
-            return new FeedResponse("Authtoken is invalid, and User is no longer active");
+            return new FeedResponse("Session expired, please log out and log in again");
         }
 
         return daoFactory.getFeedDAO().getFeed(request);

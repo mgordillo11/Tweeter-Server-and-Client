@@ -46,7 +46,7 @@ public class IsFollowerTask extends AuthenticatedTask {
             if (response.isSuccess()) {
                 isFollower = response.isFollower();
             } else {
-                throw new RuntimeException("[Bad Request] Unable to know if follower");
+                throw new RuntimeException("[Bad Request] " + response.getMessage());
             }
         } catch (IOException | TweeterRemoteException ex) {
             ex.printStackTrace();

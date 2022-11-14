@@ -14,7 +14,7 @@ public class DynamoDBStatus {
      */
     public String post;
     /**
-     * User who sent the status.
+     * User who is posting the status.
      */
     public String sender_alias;
     /**

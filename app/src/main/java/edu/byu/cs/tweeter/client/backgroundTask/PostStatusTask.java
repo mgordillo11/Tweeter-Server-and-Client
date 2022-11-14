@@ -36,11 +36,9 @@ public class PostStatusTask extends AuthenticatedTask {
             PostStatusResponse response = getServerFacade().postStatus(request, "/poststatus");
 
             // It simple needs to send a success message but our background task does that
-            if (response.isSuccess()) {
-
-            } else {
+            if (!response.isSuccess()) {
                 Log.e(BackgroundTask.MESSAGE_KEY, response.getMessage());
-                throw new RuntimeException("[Bad Request] Unable to post status");
+                throw new RuntimeException("[Bad Request] " + response.getMessage());
             }
         } catch (IOException | TweeterRemoteException ex) {
             ex.printStackTrace();

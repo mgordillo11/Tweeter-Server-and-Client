@@ -35,7 +35,7 @@ public class GetFollowingTask extends PagedTask<User> {
             if (response.isSuccess()) {
                 return new Pair<>(response.getFollowees(), response.getHasMorePages());
             } else {
-                throw new RuntimeException("[Bad Request] Unable to retrieve followees");
+                throw new RuntimeException("[Bad Request] " + response.getMessage());
             }
         } catch (IOException | TweeterRemoteException ex) {
             ex.printStackTrace();

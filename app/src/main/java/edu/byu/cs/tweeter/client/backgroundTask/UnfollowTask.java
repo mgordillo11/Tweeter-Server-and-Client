@@ -35,11 +35,9 @@ public class UnfollowTask extends AuthenticatedTask {
             UnfollowRequest request = new UnfollowRequest(authToken, followee);
             UnfollowResponse response = getServerFacade().unfollow(request, "/unfollow");
 
-            if (response.isSuccess()) {
-                // Nothing needs to be added to the bundle for this task
-            } else {
+            if (!response.isSuccess()) {
                 Log.e(BackgroundTask.MESSAGE_KEY, response.getMessage());
-                throw new RuntimeException("[Bad Request] Unable to unfollow user");
+                throw new RuntimeException("[Bad Request] " + response.getMessage());
             }
 
         } catch (IOException | TweeterRemoteException ex) {
