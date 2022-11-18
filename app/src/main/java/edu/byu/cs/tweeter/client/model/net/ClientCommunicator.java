@@ -25,11 +25,13 @@ class ClientCommunicator {
 
     private interface RequestStrategy {
         void setRequestMethod(HttpURLConnection connection) throws IOException;
+
         void sendRequest(HttpURLConnection connection) throws IOException;
     }
 
     <T> T doPost(String urlPath, final Object requestInfo, Map<String, String> headers, Class<T> returnType)
             throws IOException, TweeterRemoteException {
+
         RequestStrategy requestStrategy = new RequestStrategy() {
             @Override
             public void setRequestMethod(HttpURLConnection connection) throws IOException {
@@ -79,7 +81,7 @@ class ClientCommunicator {
             connection.setReadTimeout(TIMEOUT_MILLIS);
             requestStrategy.setRequestMethod(connection);
 
-            if(headers != null) {
+            if (headers != null) {
                 for (String headerKey : headers.keySet()) {
                     connection.setRequestProperty(headerKey, headers.get(headerKey));
                 }
@@ -101,7 +103,7 @@ class ClientCommunicator {
                     throw new RuntimeException("An unknown error occurred. Response code = " + connection.getResponseCode());
             }
         } finally {
-            if(connection != null) {
+            if (connection != null) {
                 connection.disconnect();
             }
         }
@@ -114,7 +116,7 @@ class ClientCommunicator {
 
     private ErrorResponse getErrorResponse(HttpURLConnection connection) throws IOException {
         String responseString = getResponse(connection.getErrorStream());
-        if(responseString == null) {
+        if (responseString == null) {
             throw new RuntimeException("No response returned from server for response code " + connection.getResponseCode());
         } else {
             return JsonSerializer.deserialize(responseString, ErrorResponse.class);
@@ -122,7 +124,7 @@ class ClientCommunicator {
     }
 
     private String getResponse(InputStream inputStream) throws IOException {
-        if(inputStream == null)  {
+        if (inputStream == null) {
             return null;
         } else {
             try (BufferedReader in = new BufferedReader(new InputStreamReader(inputStream))) {

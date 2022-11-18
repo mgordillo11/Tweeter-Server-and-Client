@@ -48,8 +48,8 @@ public class DynamoDBAuthtokenDAO extends DynamoDBMainDAO implements IAuthtokenD
         try {
             DynamoDBAuthtoken token = getAuthToken(authToken);
 
-            LocalDate start_date = LocalDate.now();
-            LocalDate end_date = LocalDate.parse(token.getTimeStamp());
+            LocalDate end_date = LocalDate.now();
+            LocalDate start_date = LocalDate.parse(token.getTimeStamp());
 
             // find the period between
             // the start and end date

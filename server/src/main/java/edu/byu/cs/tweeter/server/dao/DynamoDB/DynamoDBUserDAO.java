@@ -10,7 +10,8 @@ import software.amazon.awssdk.enhanced.dynamodb.model.GetItemEnhancedRequest;
 
 public class DynamoDBUserDAO extends DynamoDBMainDAO implements IUserDAO {
     private static final String TABLE_NAME = "users";
-    private final DynamoDbTable<DynamoDBUser> table = enhancedClient.table(TABLE_NAME, TableSchema.fromBean(DynamoDBUser.class));
+    private final DynamoDbTable<DynamoDBUser> table =
+            enhancedClient.table(TABLE_NAME, TableSchema.fromBean(DynamoDBUser.class));
 
     @Override
     public User login(String username) {

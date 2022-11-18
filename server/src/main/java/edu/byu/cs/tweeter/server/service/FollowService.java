@@ -116,8 +116,6 @@ public class FollowService {
         }
 
         return daoFactory.getFollowDAO().isFollowing(request);
-//        IsFollowerResponse result = daoFactory.getFollowDAO().isFollowing(request);
-//        return new IsFollowerResponse(result.isFollower());
     }
 
     public GetFollowingCountResponse getFollowingCount(GetFollowingCountRequest request) {

@@ -89,7 +89,6 @@ public class UserService {
         String imageURL = request.getImageUrl();
         try {
             imageURL = daoFactory.getImageDAO().uploadImage(request.getImageUrl(), request.getUsername());
-            System.out.println("Image URL: " + imageURL);
         } catch (Exception e) {
             System.out.println("Image URL: " + e.getMessage());
             e.printStackTrace();
