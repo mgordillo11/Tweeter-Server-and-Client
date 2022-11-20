@@ -8,7 +8,6 @@ import com.amazonaws.services.sqs.AmazonSQSClientBuilder;
 import com.amazonaws.services.sqs.model.SendMessageRequest;
 import com.amazonaws.services.sqs.model.SendMessageResult;
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -25,7 +24,8 @@ public class PostUpdateFeedMessagesHandler implements RequestHandler<SQSEvent, V
         Gson gson = new Gson();
         DAOFactory factory = new DynamoDBFactory();
 
-        String queueUrl = System.getenv("UPDATE_FEEDS_QUEUE_URL"); // TODO: Replace this later with the actual queue URL
+        String queueUrl = "https://sqs.us-east-1.amazonaws.com/669525525844/UpdateFeeds";
+        final int maxMessagesPerBatch = 100;
 
         for (SQSEvent.SQSMessage message : sqsEvent.getRecords()) {
             // Print out the body of the message
@@ -37,10 +37,10 @@ public class PostUpdateFeedMessagesHandler implements RequestHandler<SQSEvent, V
             // Get the list of followers
             List<String> followerAliases = factory.getFollowDAO().getFollowersAlias(status.getUser().getAlias());
 
-            JsonElement statusJsonElement = gson.toJsonTree(status);
+            //JsonElement statusJsonElement = gson.toJsonTree(status);
+            JsonElement statusJsonElement = gson.toJsonTree(status, Status.class);
 
             int currentIndexOfFollowers = 0;
-            int maxMessagesPerBatch = 100;
             boolean isLastMessage = false;
 
             while (!isLastMessage) {

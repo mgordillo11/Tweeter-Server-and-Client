@@ -1,5 +1,11 @@
 package edu.byu.cs.tweeter.server.dao.DynamoDB;
 
+import com.amazonaws.services.sqs.AmazonSQS;
+import com.amazonaws.services.sqs.AmazonSQSClientBuilder;
+import com.amazonaws.services.sqs.model.SendMessageRequest;
+import com.amazonaws.services.sqs.model.SendMessageResult;
+import com.google.gson.Gson;
+
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -71,12 +77,28 @@ public class DynamoDBStoryDAO extends DynamoDBMainDAO implements IStoryDAO {
 
     @Override
     public boolean postStatus(Status status) {
+        AmazonSQS sqs = AmazonSQSClientBuilder.defaultClient();
+        String postUpdateFeedMessagesQueueUrl = "https://sqs.us-east-1.amazonaws.com/669525525844/PostUpdateFeedMessages";
+
+        Gson gson = new Gson();
         Long datetime = Long.valueOf(status.getDate());
 
         try {
+            // #1: Add status to story table
             DynamoDBStatus dynamoDBStatus = new DynamoDBStatus(status.getPost(),
                     status.getUser().getAlias(), datetime, status.getUrls(), status.getMentions());
             table.putItem(dynamoDBStatus);
+
+            // #2: Add status to feed table, by sending message to SQS queue
+            String message = gson.toJson(status);
+
+            SendMessageRequest sendMessageRequest = new SendMessageRequest()
+                    .withQueueUrl(postUpdateFeedMessagesQueueUrl)
+                    .withMessageBody(message);
+
+            SendMessageResult sendMessageResult = sqs.sendMessage(sendMessageRequest);
+            System.out.println("Sent message to SQS queue: " + sendMessageResult.getMessageId());
+
             return true;
         } catch (Exception e) {
             System.err.println("Post did not work");

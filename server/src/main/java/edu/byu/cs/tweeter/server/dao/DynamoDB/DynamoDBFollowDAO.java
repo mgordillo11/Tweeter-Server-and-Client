@@ -205,7 +205,7 @@ public class DynamoDBFollowDAO extends DynamoDBMainDAO implements IFollowDAO {
         QueryEnhancedRequest.Builder requestBuilder = QueryEnhancedRequest.builder()
                 .queryConditional(QueryConditional.keyEqualTo(key))
                 .limit(limit);
-                //.scanIndexForward(false);
+        //.scanIndexForward(false);
 
         if (request.getLastFollowerAlias() != null) {
             Map<String, AttributeValue> startKey = new HashMap<>();

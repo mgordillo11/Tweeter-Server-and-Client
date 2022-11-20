@@ -7,6 +7,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import edu.byu.cs.tweeter.model.domain.Status;
@@ -24,15 +25,14 @@ public class UpdateFeedsHandler implements RequestHandler<SQSEvent, Void> {
             System.out.println("Message Body: " + message.getBody());
 
             String messageBody = gson.toJson(message.getBody());
-
             JsonObject messageBodyObject = gson.fromJson(messageBody, JsonObject.class);
-            JsonArray followers = messageBodyObject.getAsJsonArray("Followers");
-
-            // Convert the followers to a list of strings
-            List<String> followerAliases = gson.fromJson(followers, List.class);
-            //String[] followersArray = gson.fromJson(followers, String[].class);
 
             Status postedStatus = gson.fromJson(messageBodyObject.get("Status"), Status.class);
+            JsonArray followers = messageBodyObject.getAsJsonArray("Followers");
+
+            List<String> followerAliases = new ArrayList<>();
+
+            followers.forEach(follower -> followerAliases.add(follower.getAsString()));
 
             factory.getFeedDAO().addFeedBatch(postedStatus, followerAliases);
         }

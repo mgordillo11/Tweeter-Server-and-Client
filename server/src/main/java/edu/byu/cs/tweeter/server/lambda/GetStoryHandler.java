@@ -8,7 +8,7 @@ import edu.byu.cs.tweeter.model.net.response.StoryResponse;
 import edu.byu.cs.tweeter.server.dao.DynamoDB.DynamoDBFactory;
 import edu.byu.cs.tweeter.server.service.StatusService;
 
-public class GetStoryHandler implements RequestHandler <StoryRequest, StoryResponse> {
+public class GetStoryHandler implements RequestHandler<StoryRequest, StoryResponse> {
 
     @Override
     public StoryResponse handleRequest(StoryRequest input, Context context) {

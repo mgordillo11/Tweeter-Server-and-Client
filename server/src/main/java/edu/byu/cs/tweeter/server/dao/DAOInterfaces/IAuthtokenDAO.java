@@ -4,7 +4,7 @@ import edu.byu.cs.tweeter.model.domain.Authtoken;
 import edu.byu.cs.tweeter.model.net.response.LogoutResponse;
 
 public interface IAuthtokenDAO {
-    Authtoken createAuthToken(String username) ;
+    Authtoken createAuthToken(String username);
 
     LogoutResponse logout(Authtoken authToken);
 
