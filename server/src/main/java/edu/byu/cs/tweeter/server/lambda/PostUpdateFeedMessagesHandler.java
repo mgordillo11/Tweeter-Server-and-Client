@@ -8,10 +8,12 @@ import com.amazonaws.services.sqs.AmazonSQSClientBuilder;
 import com.amazonaws.services.sqs.model.SendMessageRequest;
 import com.amazonaws.services.sqs.model.SendMessageResult;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
+import java.util.Arrays;
 import java.util.List;
 
 import edu.byu.cs.tweeter.model.domain.Status;
@@ -21,10 +23,12 @@ import edu.byu.cs.tweeter.server.dao.DynamoDB.DynamoDBFactory;
 public class PostUpdateFeedMessagesHandler implements RequestHandler<SQSEvent, Void> {
     @Override
     public Void handleRequest(SQSEvent sqsEvent, Context context) {
-        Gson gson = new Gson();
+        Gson gson = new GsonBuilder().create();
         DAOFactory factory = new DynamoDBFactory();
 
+        AmazonSQS sqs = AmazonSQSClientBuilder.defaultClient();
         String queueUrl = "https://sqs.us-east-1.amazonaws.com/669525525844/UpdateFeeds";
+
         final int maxMessagesPerBatch = 100;
 
         for (SQSEvent.SQSMessage message : sqsEvent.getRecords()) {
@@ -34,11 +38,13 @@ public class PostUpdateFeedMessagesHandler implements RequestHandler<SQSEvent, V
             // Get the status from the message
             Status status = gson.fromJson(message.getBody(), Status.class);
 
+            System.out.println("Status: " + status);
+
             // Get the list of followers
             List<String> followerAliases = factory.getFollowDAO().getFollowersAlias(status.getUser().getAlias());
+            System.out.println("Followers: " + Arrays.toString(followerAliases.toArray()));
 
-            //JsonElement statusJsonElement = gson.toJsonTree(status);
-            JsonElement statusJsonElement = gson.toJsonTree(status, Status.class);
+            //JsonElement statusJsonElement = gson.toJsonTree(status, Status.class);
 
             int currentIndexOfFollowers = 0;
             boolean isLastMessage = false;
@@ -60,16 +66,25 @@ public class PostUpdateFeedMessagesHandler implements RequestHandler<SQSEvent, V
                     currentMessageCount++;
                 }
 
-                messageBodyObject.add("Status", statusJsonElement);
-                messageBodyObject.add("Followers", jsonFollowers);
+                // Add the original status to the message body, this it's already in JSON format
+                messageBodyObject.addProperty("status", message.getBody());
+                messageBodyObject.add("followers", jsonFollowers);
 
-                String messageBody = gson.toJson(messageBodyObject);
+                String messageBody = gson.toJson(messageBodyObject, JsonObject.class);
+
+                System.out.println("Message Body: " + messageBody);
+
+                try {
+                    JsonObject messageAttributes = gson.fromJson(message.getBody(), JsonObject.class);
+                    System.out.println("Message Attributes: " + messageAttributes);
+                } catch (Exception e) {
+                    System.out.println("Error parsing message attributes: " + e.getMessage());
+                }
 
                 SendMessageRequest sendMessageRequest = new SendMessageRequest()
                         .withQueueUrl(queueUrl)
                         .withMessageBody(messageBody);
 
-                AmazonSQS sqs = AmazonSQSClientBuilder.defaultClient();
                 SendMessageResult sendMessageResult = sqs.sendMessage(sendMessageRequest);
 
                 System.out.println("Message Result ID: " + sendMessageResult.getMessageId());

@@ -90,11 +90,11 @@ public class DynamoDBStoryDAO extends DynamoDBMainDAO implements IStoryDAO {
             table.putItem(dynamoDBStatus);
 
             // #2: Add status to feed table, by sending message to SQS queue
-            String message = gson.toJson(status);
+            String messageBody = gson.toJson(status);
 
             SendMessageRequest sendMessageRequest = new SendMessageRequest()
                     .withQueueUrl(postUpdateFeedMessagesQueueUrl)
-                    .withMessageBody(message);
+                    .withMessageBody(messageBody);
 
             SendMessageResult sendMessageResult = sqs.sendMessage(sendMessageRequest);
             System.out.println("Sent message to SQS queue: " + sendMessageResult.getMessageId());
