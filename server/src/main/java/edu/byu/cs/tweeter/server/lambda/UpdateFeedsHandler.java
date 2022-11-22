@@ -6,7 +6,9 @@ import com.amazonaws.services.lambda.runtime.events.SQSEvent;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.google.gson.JsonPrimitive;
 
 import java.util.ArrayList;
@@ -27,12 +29,10 @@ public class UpdateFeedsHandler implements RequestHandler<SQSEvent, Void> {
             // Print out the body of the message
             System.out.println("Message Body: " + message.getBody());
 
-            String messageBody = gson.toJson(message.getBody());
+            JsonObject messageBodyObject = JsonParser.parseString(message.getBody()).getAsJsonObject();
 
-            JsonObject messageBodyObject = gson.fromJson(messageBody, JsonObject.class);
-
-            String postedStatusJson = messageBodyObject.get("status").getAsString();
-            Status postedStatus = gson.fromJson(postedStatusJson, Status.class);
+            JsonElement element = messageBodyObject.get("status");
+            Status postedStatus = gson.fromJson(element, Status.class);
 
             JsonArray followers = messageBodyObject.getAsJsonArray("followers");
 

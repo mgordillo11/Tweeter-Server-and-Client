@@ -44,7 +44,7 @@ public class PostUpdateFeedMessagesHandler implements RequestHandler<SQSEvent, V
             List<String> followerAliases = factory.getFollowDAO().getFollowersAlias(status.getUser().getAlias());
             System.out.println("Followers: " + Arrays.toString(followerAliases.toArray()));
 
-            //JsonElement statusJsonElement = gson.toJsonTree(status, Status.class);
+            JsonElement statusJsonElement = gson.toJsonTree(status, Status.class);
 
             int currentIndexOfFollowers = 0;
             boolean isLastMessage = false;
@@ -66,27 +66,16 @@ public class PostUpdateFeedMessagesHandler implements RequestHandler<SQSEvent, V
                     currentMessageCount++;
                 }
 
-                // Add the original status to the message body, this it's already in JSON format
-                messageBodyObject.addProperty("status", message.getBody());
+                messageBodyObject.add("status", statusJsonElement);
                 messageBodyObject.add("followers", jsonFollowers);
 
                 String messageBody = gson.toJson(messageBodyObject, JsonObject.class);
-
-                System.out.println("Message Body: " + messageBody);
-
-                try {
-                    JsonObject messageAttributes = gson.fromJson(message.getBody(), JsonObject.class);
-                    System.out.println("Message Attributes: " + messageAttributes);
-                } catch (Exception e) {
-                    System.out.println("Error parsing message attributes: " + e.getMessage());
-                }
 
                 SendMessageRequest sendMessageRequest = new SendMessageRequest()
                         .withQueueUrl(queueUrl)
                         .withMessageBody(messageBody);
 
                 SendMessageResult sendMessageResult = sqs.sendMessage(sendMessageRequest);
-
                 System.out.println("Message Result ID: " + sendMessageResult.getMessageId());
             }
         }

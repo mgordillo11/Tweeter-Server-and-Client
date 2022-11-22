@@ -18,10 +18,12 @@ import software.amazon.awssdk.enhanced.dynamodb.DynamoDbTable;
 import software.amazon.awssdk.enhanced.dynamodb.Key;
 import software.amazon.awssdk.enhanced.dynamodb.TableSchema;
 import software.amazon.awssdk.enhanced.dynamodb.model.BatchWriteItemEnhancedRequest;
+import software.amazon.awssdk.enhanced.dynamodb.model.BatchWriteResult;
 import software.amazon.awssdk.enhanced.dynamodb.model.QueryConditional;
 import software.amazon.awssdk.enhanced.dynamodb.model.QueryEnhancedRequest;
 import software.amazon.awssdk.enhanced.dynamodb.model.WriteBatch;
 import software.amazon.awssdk.services.dynamodb.model.AttributeValue;
+import software.amazon.awssdk.services.dynamodb.model.BatchWriteItemResponse;
 
 public class DynamoDBFeedDAO extends DynamoDBMainDAO implements IFeedDAO {
     private static final String TABLE_NAME = "feed";
@@ -131,11 +133,21 @@ public class DynamoDBFeedDAO extends DynamoDBMainDAO implements IFeedDAO {
                 writeBatches.clear();
             }
         }
+
+        // Left over items, that didn't make a full batch
+        if (writeBatches.size() > 0) {
+            BatchWriteItemEnhancedRequest batchWriteItemEnhancedRequest = BatchWriteItemEnhancedRequest.builder()
+                    .writeBatches(writeBatches)
+                    .build();
+
+            loopBatchWrite(batchWriteItemEnhancedRequest);
+        }
     }
 
     private void loopBatchWrite(BatchWriteItemEnhancedRequest batchWriteItemEnhancedRequest) {
         try {
-            enhancedClient.batchWriteItem(batchWriteItemEnhancedRequest);
+            BatchWriteResult result = enhancedClient.batchWriteItem(batchWriteItemEnhancedRequest);
+            System.out.println("Batch write succeeded: " + result);
         } catch (Exception e) {
             System.err.println("Unable to add batch of feeds");
             throw new RuntimeException(e);
