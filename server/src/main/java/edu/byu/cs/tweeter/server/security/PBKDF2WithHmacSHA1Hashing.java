@@ -29,7 +29,7 @@ public class PBKDF2WithHmacSHA1Hashing {
         return diff == 0;
     }
 
-    public byte[] fromHex(String hex) throws NoSuchAlgorithmException {
+    public byte[] fromHex(String hex) {
         byte[] bytes = new byte[hex.length() / 2];
         for (int i = 0; i < bytes.length; i++) {
             bytes[i] = (byte) Integer.parseInt(hex.substring(2 * i, 2 * i + 2), 16);

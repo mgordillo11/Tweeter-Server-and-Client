@@ -151,23 +151,6 @@ public class DynamoDBFollowDAO extends DynamoDBMainDAO implements IFollowDAO {
 
     @Override
     public int getFollowersCount(String userAlias) {
-//        Key key = Key.builder().partitionValue(userAlias).build();
-//
-//        QueryEnhancedRequest.Builder requestBuilder = QueryEnhancedRequest.builder()
-//                .queryConditional(QueryConditional.keyEqualTo(key));
-//
-//        QueryEnhancedRequest queryEnhancedRequest = requestBuilder.build();
-//
-//        SdkIterable<Page<DynamoDBFollows>> results = followsIndex.query(queryEnhancedRequest);
-//        PageIterable<DynamoDBFollows> pages = PageIterable.create(results);
-//
-//        List<DynamoDBFollows> followers = new ArrayList<>();;
-//
-//        pages.stream()
-//                .limit(1)
-//                .forEach(visitsPage -> followers.addAll(visitsPage.items()));
-//
-//        return followers.size();
         return getFollowersAlias(userAlias).size();
     }
 
@@ -193,6 +176,9 @@ public class DynamoDBFollowDAO extends DynamoDBMainDAO implements IFollowDAO {
         for (DynamoDBFollows follower : followers) {
             followersAlias.add(follower.getFollower_handle());
         }
+
+        System.out.println("Followers Size: " + followersAlias.size());
+
 
         return followersAlias;
     }
