@@ -22,6 +22,7 @@ public class RegisterHandler implements RequestHandler<RegisterRequest, Register
         UserService userService = new UserService(new DynamoDBFactory());
         userService.register(request);
     }
+
     @Override
     public RegisterResponse handleRequest(RegisterRequest registerRequest, Context context) {
         UserService userService = new UserService(new DynamoDBFactory());

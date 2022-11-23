@@ -28,6 +28,18 @@ dependencies {
     // https://mvnrepository.com/artifact/com.amazonaws/aws-java-sdk-s3
     implementation group: 'com.amazonaws', name: 'aws-java-sdk-s3', version: '1.12.336'
 
+    // https://mvnrepository.com/artifact/com.amazonaws/aws-java-sdk-core
+    implementation group: 'com.amazonaws', name: 'aws-java-sdk-core', version: '1.12.346'
+
+    // https://mvnrepository.com/artifact/com.amazonaws/aws-java-sdk-sqs
+    implementation group: 'com.amazonaws', name: 'aws-java-sdk-sqs', version: '1.12.345'
+
+    // https://mvnrepository.com/artifact/com.amazonaws/aws-lambda-java-core
+    implementation group: 'com.amazonaws', name: 'aws-lambda-java-core', version: '1.2.2'
+
+    // https://mvnrepository.com/artifact/com.amazonaws/aws-lambda-java-events
+    implementation group: 'com.amazonaws', name: 'aws-lambda-java-events', version: '3.11.0'
+
     // https://mvnrepository.com/artifact/com.amazonaws/aws-android-sdk-cognitoidentityprovider
     implementation group: 'com.amazonaws', name: 'aws-android-sdk-cognitoidentityprovider', version: '2.56.0'
 

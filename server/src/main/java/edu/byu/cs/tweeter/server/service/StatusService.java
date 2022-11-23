@@ -1,7 +1,5 @@
 package edu.byu.cs.tweeter.server.service;
 
-import java.util.List;
-
 import edu.byu.cs.tweeter.model.net.request.FeedRequest;
 import edu.byu.cs.tweeter.model.net.request.PostStatusRequest;
 import edu.byu.cs.tweeter.model.net.request.StoryRequest;
@@ -36,10 +34,12 @@ public class StatusService {
             return new PostStatusResponse("An error occurred while posting the status");
         }
 
-        List<String> followers = daoFactory.getFollowDAO().getFollowersAlias(request.getStatus().getUser().getAlias());
-        for (String follower : followers) {
-            daoFactory.getFeedDAO().updateFeed(follower, request);
-        }
+        // TODO: Update the feed for all followers
+        // FIXED WITH MILESTONE 4B (see UpdateFeedsHandler.java)
+//        List<String> followers = daoFactory.getFollowDAO().getFollowersAlias(request.getStatus().getUser().getAlias());
+//        for (String follower : followers) {
+//            daoFactory.getFeedDAO().updateFeed(follower, request);
+//        }
 
         return new PostStatusResponse();
     }

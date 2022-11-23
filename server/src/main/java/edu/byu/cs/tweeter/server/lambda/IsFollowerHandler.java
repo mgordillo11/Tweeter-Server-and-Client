@@ -14,7 +14,7 @@ public class IsFollowerHandler implements RequestHandler<IsFollowerRequest, IsFo
     public static void main(String[] args) {
         Authtoken authtoken = new Authtoken("369ce346-37b8-44a1-9593-706d218b561e", "2022-11-14");
         User manny = new User("Manny", "Manny", "@ryth", "https://faculty.cs.byu.edu/~jwilkerson/cs340/tweeter/images/donald_duck.png");
-        User carlos = new User("Carlos", "Carlos", "@carlos","https://faculty.cs.byu.edu/~jwilkerson/cs340/tweeter/images/donald_duck.png");
+        User carlos = new User("Carlos", "Carlos", "@carlos", "https://faculty.cs.byu.edu/~jwilkerson/cs340/tweeter/images/donald_duck.png");
 
         IsFollowerRequest request = new IsFollowerRequest(authtoken, manny, carlos);
 

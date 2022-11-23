@@ -17,9 +17,13 @@ import edu.byu.cs.tweeter.server.dao.DynamoDB.domain.DynamoDBStatus;
 import software.amazon.awssdk.enhanced.dynamodb.DynamoDbTable;
 import software.amazon.awssdk.enhanced.dynamodb.Key;
 import software.amazon.awssdk.enhanced.dynamodb.TableSchema;
+import software.amazon.awssdk.enhanced.dynamodb.model.BatchWriteItemEnhancedRequest;
+import software.amazon.awssdk.enhanced.dynamodb.model.BatchWriteResult;
 import software.amazon.awssdk.enhanced.dynamodb.model.QueryConditional;
 import software.amazon.awssdk.enhanced.dynamodb.model.QueryEnhancedRequest;
+import software.amazon.awssdk.enhanced.dynamodb.model.WriteBatch;
 import software.amazon.awssdk.services.dynamodb.model.AttributeValue;
+import software.amazon.awssdk.services.dynamodb.model.BatchWriteItemResponse;
 
 public class DynamoDBFeedDAO extends DynamoDBMainDAO implements IFeedDAO {
     private static final String TABLE_NAME = "feed";
@@ -95,6 +99,57 @@ public class DynamoDBFeedDAO extends DynamoDBMainDAO implements IFeedDAO {
             table.putItem(addedFeed);
         } catch (Exception e) {
             System.err.println("Unable to add feed item: " + alias + " " + convertedTime);
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public void addFeedBatch(Status status, List<String> followers) {
+        Long convertedTime = Long.valueOf(status.getDate());
+
+        DynamoDBStatus dynamoDBStatus = new DynamoDBStatus(status.getPost(),
+                status.getUser().getAlias(), convertedTime, status.getUrls(), status.getMentions());
+
+        List<WriteBatch> writeBatches = new ArrayList<>();
+
+        for (String follower : followers) {
+            DynamoDBFeed addedFeed = new DynamoDBFeed(follower, convertedTime, dynamoDBStatus);
+
+            WriteBatch currWriteBatch = WriteBatch.builder(DynamoDBFeed.class)
+                    .mappedTableResource(table)
+                    .addPutItem(addedFeed)
+                    .build();
+
+            writeBatches.add(currWriteBatch);
+
+            // 25 is the maximum number of items allowed in a single batch write.
+            // Attempting to write more than 25 items will result in an exception being thrown
+            if (writeBatches.size() == 25) {
+                BatchWriteItemEnhancedRequest batchWriteItemEnhancedRequest = BatchWriteItemEnhancedRequest.builder()
+                        .writeBatches(writeBatches)
+                        .build();
+
+                loopBatchWrite(batchWriteItemEnhancedRequest);
+                writeBatches.clear();
+            }
+        }
+
+        // Left over items, that didn't make a full batch
+        if (writeBatches.size() > 0) {
+            BatchWriteItemEnhancedRequest batchWriteItemEnhancedRequest = BatchWriteItemEnhancedRequest.builder()
+                    .writeBatches(writeBatches)
+                    .build();
+
+            loopBatchWrite(batchWriteItemEnhancedRequest);
+        }
+    }
+
+    private void loopBatchWrite(BatchWriteItemEnhancedRequest batchWriteItemEnhancedRequest) {
+        try {
+            BatchWriteResult result = enhancedClient.batchWriteItem(batchWriteItemEnhancedRequest);
+            System.out.println("Batch write succeeded: " + result);
+        } catch (Exception e) {
+            System.err.println("Unable to add batch of feeds");
             throw new RuntimeException(e);
         }
     }
