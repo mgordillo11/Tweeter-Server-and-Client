@@ -53,7 +53,8 @@ public class MainPresenter extends Presenter {
 
     public void statusPost(String post) {
         try {
-            getStatusService().postStatus(Cache.getInstance().getCurrUserAuthToken(), Cache.getInstance().getCurrUser(), post, getFormattedDateTime(), parseURLs(post), parseMentions(post), new PostStatusObserver());
+            PostStatusObserver observer = getPostStatusObserver();
+            getStatusService().postStatus(Cache.getInstance().getCurrUserAuthToken(), Cache.getInstance().getCurrUser(), post, getFormattedDateTime(), parseURLs(post), parseMentions(post), observer);
         } catch (Exception ex) {
             Log.e(LOG_TAG, ex.getMessage(), ex);
             mainActivityView.displayMessage("Failed to post the status because of exception: " + ex.getMessage());
@@ -79,15 +80,6 @@ public class MainPresenter extends Presenter {
     public void updateSelectedUserFollowingAndFollowers(User selectedUser) {
         followService.updateSelectedUserFollowingAndFollowers(Cache.getInstance().getCurrUserAuthToken(), selectedUser, new GetFollowersCountObserver(), new GetFollowingCountObserver());
     }
-
-//    public String getFormattedDateTime() throws ParseException {
-//        SimpleDateFormat userFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-//        SimpleDateFormat statusFormat = new SimpleDateFormat("MMM d yyyy h:mm aaa");
-//        String test1 = LocalDate.now().toString();
-//        String test2 = LocalTime.now().toString().substring(0, 8);
-//
-//        return statusFormat.format(userFormat.parse(LocalDate.now().toString() + " " + LocalTime.now().toString().substring(0, 8)));
-//    }
 
     public String getFormattedDateTime() {
         Timestamp timestamp = new Timestamp(System.currentTimeMillis());
@@ -149,13 +141,18 @@ public class MainPresenter extends Presenter {
         }
     }
 
-    private class PostStatusObserver extends SimpleNotificationObserver {
+    public PostStatusObserver getPostStatusObserver() {
+        return new PostStatusObserver();
+    }
+
+    public class PostStatusObserver extends SimpleNotificationObserver {
         public PostStatusObserver() {
             super(mainActivityView, "Failed to post status: ", "Failed to post status because of exception: ");
         }
 
         @Override
         public void handleSuccess() {
+            System.out.println("Status posted successfully");
             mainActivityView.showPostingToast(false);
             mainActivityView.displayMessage("Successfully Posted!");
         }

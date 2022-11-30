@@ -43,6 +43,14 @@ public class ServerFacade {
     private static final String SERVER_URL = "https://dp2hvzrgbc.execute-api.us-east-1.amazonaws.com/Tweeter";
 
     private final ClientCommunicator clientCommunicator = new ClientCommunicator(SERVER_URL);
+    private static ServerFacade instance;
+
+    public static ServerFacade getInstance() {
+            if(instance == null) {
+                instance = new ServerFacade();
+            }
+            return instance;
+    }
 
 //    public <Q extends Request, R extends Response> R request(Q request, String urlPath, Class<R> clazz) throws IOException, TweeterRemoteException {
 //        R response = clientCommunicator.doPost(urlPath, request, null, clazz);
